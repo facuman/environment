@@ -1,0 +1,14 @@
+// HTML Tidy configuration file 
+add-xml-decl: no
+char-encoding: utf8
+doctype: omit
+error-file: errs.txt
+force-output: yes
+gnu-emacs: yes
+indent: yes
+indent-attributes: yes
+input-xml: yes
+output-xhtml: yes
+output-xml: yes
+repeated-attributes: keep-last
+wrap: 76

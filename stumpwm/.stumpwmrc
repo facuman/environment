@@ -1,0 +1,153 @@
+;;;; -*- Mode: Lisp -*-
+
+(in-package :stumpwm)
+
+;; additional modules
+;; (load "/home/fdeguzman/install/stumpwm/contrib/battery.lisp")
+
+;;; Window Appearance
+;; The width in pixels given to the borders of regular windows.
+(setf *normal-border-width* 1)
+;; The width in pixels given to the borders of windows with maxsize or ratio hints.
+(setf *maxsize-border-width* 1)
+;; The width in pixels given to the borders of transient or pop-up windows.
+(setf *transient-border-width* 1)
+
+(defvar *maximized-frame-size* (make-frame :number -1 :x 0 :y 0 :width 1280 :height 800))
+(defvar *current-frame-size* (make-frame :number -1 :x 0 :y 0 :width 0 :height 0))
+(defvar *current-maximized-frame* nil)
+
+(defparameter FOREGROUND-COLOR "green")
+(defparameter BACKGROUND-COLOR "black")
+(defparameter BORDER-COLOR "green")
+
+;; Window border colors.
+;; (set-focus-color BACKGROUND-COLOR)
+;; (set-unfocus-color BACKGROUND-COLOR)
+(set-focus-color   "DarkRed")
+(set-unfocus-color "black")
+(set-win-bg-color BACKGROUND-COLOR)
+
+(setf *window-border-style* :thin)     ; :thick :thin :tight :none
+
+;; Input box colors
+(set-bg-color BACKGROUND-COLOR)
+(set-fg-color "forestgreen")
+(set-border-color "SteelBlue")
+(set-msg-border-width 0)
+(setf *input-window-gravity* :bottom-right)
+
+;; Set the message and input box to the bottom right. This way it overlaps with mode-line.
+(setf *message-window-gravity* :bottom-right)
+;; in seconds, how long a message will appear for. This must be an integer.
+;; (setf *timeout-wait* 5)
+
+;; Frame
+(set-frame-outline-width 1)
+
+(setf *frame-number-map* "1234567890")
+
+(set-prefix-key (kbd "C-i"))
+
+;; macro for faster startups
+(defmacro replace-hook (hook fn)
+  `(remove-hook, hook, fn)
+  `(add-hook, hook, fn))
+
+;; (run-shell-command "xmodmap -e \'keycode 135 = F20\'")
+;; (set-prefix-key (kbd "F20"))
+
+(define-key *top-map* (kbd "s-RET") 
+;;  "exec urxvt +sb -fn \"xft:Bitstream Vera Sans Mono:pixelsize=12\"")
+  "exec urxvtc +sb")
+
+;; Lock screen
+(define-key *root-map* (kbd "s-F2") "exec xscreensaver-command -lock") 
+
+;; Kill windows
+(define-key *top-map* (kbd "s-C") "delete")
+
+(define-key *root-map* (kbd "C-q") "quit")
+(run-shell-command (concatenate 'string "xloadimage -onroot /home/fdeguzman/.backgrounds/01155_dharmainitiative_1280x800.jpg")) 
+(run-shell-command (concatenate 'string "xscreensaver-command -exit; xscreensaver -no-splash &"))
+;; (define-key *root-map* (kbd "g f") "gnew-float")
+
+;; Set bell off
+(run-shell-command (concatenate 'string "xset -b"))
+
+;; Top keys
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec amixer set Master 3- unmute")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec amixer set Master 3+ unmute")
+(define-key *top-map* (kbd "XF86AudioMute") "exec amixer set 'Master' toggle") 
+
+(define-key *root-map* (kbd "C-p") "exec xpdf")
+(define-key *top-map* (kbd "s-Right") "gnext")
+(define-key *top-map* (kbd "s-Left") "gprev")
+(define-key *top-map* (kbd "s-F7") "exec xrandr --output LVDS1 --mode 1280x800  --primary --output VGA1 --auto --below LVDS1")
+(define-key *top-map* (kbd "s-F8") "exec xrandr --output VGA1 --auto --same-as LVDS1")
+(define-key *root-map* (kbd "u") "prev")
+(define-key *top-map* (kbd "s-F2") "exec xscreensaver-command -lock")
+(define-key *top-map* (kbd "s-q") "quit")
+(define-key *root-map* (kbd "C-q") "")
+
+;; Root keys
+(define-key *top-map* (kbd "M-SPC") "exec dmenu_run")
+
+;; Custom commands
+(defcommand browser () ()
+  "Run or switch to browser."
+  (run-or-raise "exec schedtool -N -n 19 -e /home/fdeguzman/install/bin/firefox_tmpfs" '(:class "Firefox")))
+(define-key *root-map* (kbd "f") "browser")
+
+(defcommand mailclient () ()
+  "Run or switch to the mail client."
+  (run-or-raise "exec schedtool -N -n 19 -e thunderbird" '(:class "Thunderbird")))
+(define-key *root-map* (kbd "m") "mailclient")
+
+(defcommand systray () ()
+  "Run or raise the systray"
+  (run-or-raise "exec stalonetray" '(:class "systray")))
+
+(defcommand take-screenshot () ()
+            (run-shell-command "scrot $HOME/xwd-$(date +%Y%m%d-%H%M%S).png -c"))
+(define-key *top-map* (kbd "Print") "take-screenshot")
+
+(defcommand part-screenshot () ()
+            (run-shell-command "scrot $HOME/xwd-$(date +%Y%m%d-%H%M%S).png -s"))
+(define-key *top-map* (kbd "M-Print") "part-screenshot")
+
+;; (define-key *root-map* (kbd "t") "systray")
+
+;; (defun get-group-name-by-number (number)
+;;  (let ((the-group (find number (screen-groups (current-screen)) :key 'group-number)))
+;;   (tile-group-name the-group)))
+
+;; make 9 groups by default on the background. 9 is enough for my daily use as I seldom have more
+;; than 9 applications open at the same time.
+(dotimes (x 9)
+  (define-key *top-map* (kbd (format nil "M-F~a" (1+ x))) (format nil "gselect ~a" (1+ x))))
+
+(defun groupnames ()
+	(mapcar 'group-name (screen-groups (current-screen))))
+
+(dotimes (x 8)
+	(gnewbg (concat "Group " (write-to-string (+ 1 x)))))
+
+
+(define-frame-preference "Group 8"
+	(1 nil t :class "stalonetray")
+	(0 nil t :class "Skype"))
+(define-frame-preference "Default"
+	(0 nil t :class "Firefox"))
+(define-frame-preference "Group 1"
+	(0 nil t :class "Thunderbird"))
+(define-frame-preference "Group 2"
+	(0 nil t :class "rdesktop"))
+
+;; AUTOSTART APPLICATIONS
+(systray)
+(run-shell-command "exec schedtool -N -n 19 -e skype")
+
+;; -to-group (find-group (current-screen) "Group 2"))
+(browser)
+(mailclient)
