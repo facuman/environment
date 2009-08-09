@@ -215,6 +215,7 @@ File suffix is used to determine what program to run."
 ;; ---------------------------------------------------------- [ anything ]
 (require 'anything-config)
 (require 'anything-ipython)
+(require 'anything-show-completion)
 (require 'anything)
 
 
@@ -280,7 +281,12 @@ File suffix is used to determine what program to run."
 
 
 ;; ------------------------------------------------------------- [ python ]
+(require 'python)
+
+
+;; ------------------------------------------------------------- [ ipython ]
 (require 'ipython)
+(setq python-python-command "~/environment/python/2.5/bin/ipython")
 (setq py-python-command-args '( "-colors" "Linux"))
 
 
@@ -504,6 +510,8 @@ type of version control found in that directory"
 
 
 ;; ---------------------------------------------------- [ ElDoc startup ]
+(add-hook 'python-mode-hook
+          '(lambda () (eldoc-mode 1)) t)
 
 
 ;; ---------------------------------------------------- [ Tidy startup ]
