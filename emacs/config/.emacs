@@ -1,3 +1,5 @@
+
+
 ;; -----------------------------------------------------------------------
 ;; Facuman's .emacs
 ;; -----------------------------------------------------------------------
@@ -212,6 +214,7 @@ File suffix is used to determine what program to run."
 
 ;; ---------------------------------------------------------- [ anything ]
 (require 'anything-config)
+(require 'anything-ipython)
 (require 'anything)
 
 
@@ -274,6 +277,11 @@ File suffix is used to determine what program to run."
 (eval-after-load "cperl"
   '(progn
      (setq cperl-hairy t)))
+
+
+;; ------------------------------------------------------------- [ python ]
+(require 'ipython)
+(setq py-python-command-args '( "-colors" "Linux"))
 
 
 ;; ----------------------------------------------------------- [ ibuffer ]
@@ -412,6 +420,7 @@ Stolen from http://www.dotemacs.de/dotfiles/BenjaminRutt.emacs.html."
 ;; -----------------------------------------------------------------------
 ;; Helper Functions (used in mode startup)
 ;; -----------------------------------------------------------------------
+
 ;; --------------------------------------------- [ start-programing-mode ]
 (defun start-programing-mode()
   (interactive)
@@ -476,6 +485,7 @@ type of version control found in that directory"
   (interactive)
   (local-set-key '[f4] 'pdb)
   (setq tab-width 2)
+  (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)
   (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
   (setq python-indent 2)
   (setq python-continuation-offset 2)
@@ -483,6 +493,17 @@ type of version control found in that directory"
   ;;(my-start-scripting-mode "py" "#!/usr/bin/python"))
 
 (add-hook 'python-mode-hook 'my-python-startup)
+
+
+;; ---------------------------------------------------- [ IPython startup ]
+(defun my-ipython-startup ()
+  "Setup IPython shell hook."
+  (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
+
+(add-hook 'ipython-shell-hook 'my-ipython-startup)
+
+
+;; ---------------------------------------------------- [ ElDoc startup ]
 
 
 ;; ---------------------------------------------------- [ Tidy startup ]

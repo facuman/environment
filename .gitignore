@@ -2,3 +2,5 @@
 *.swp
 *.elc
 binaries
+*.pyc
+*.pyo
