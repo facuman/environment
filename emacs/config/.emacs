@@ -1,5 +1,4 @@
 
-
 ;; -----------------------------------------------------------------------
 ;; Facuman's .emacs
 ;; -----------------------------------------------------------------------
@@ -31,6 +30,7 @@
 (add-to-list 'load-path "~/environment/emacs/modes/")
 (add-to-list 'load-path "~/environment/emacs/modes/anything-config")
 (add-to-list 'load-path "~/environment/emacs/modes/cperl-mode")
+(add-to-list 'load-path "~/environment/emacs/modes/python-mode")
 (setq byte-compile-warnings nil)
 
 ;; -----------------------------------------------------------------------
@@ -103,7 +103,7 @@ File suffix is used to determine what program to run."
           '(
             ("php" . "php")
             ("pl" . "~/environment/binaries/ActivePerl-5.8/bin/perl")
-            ("py" . "python")
+;;            ("py" . "python")
             ("sh" . "bash")
             ("java" . "javac")
             )
@@ -168,8 +168,8 @@ File suffix is used to determine what program to run."
                 ("\\.ll$" . flex-mode)
                 ("\\.lua$" . lua-mode)
                 ("\\.org$" . org-mode)
-                ("SCons\\(cript\\|truct\\)" . python-mode)
-                ("\\.gclient$" . python-mode)
+                ("\\.py$" . python-mode)
+;;                ("SCons\\(cript\\|truct\\)" . python-mode)                ("\\.gclient$" . python-mode)
                 ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
                 ("perl" . cperl-mode)
                 ("perl5" . cperl-mode)
@@ -280,14 +280,39 @@ File suffix is used to determine what program to run."
      (setq cperl-hairy t)))
 
 
+;; ------------------------------------------------------------- [ autocomplete ]
+(require 'auto-complete)
+(global-auto-complete-mode t) ;; Set autocomplete by default
+
+
 ;; ------------------------------------------------------------- [ python ]
-(require 'python)
 
+(defadvice py-execute-buffer (around python-keep-focus activate)
+  "return focus to python code buffer"
+  (save-excursion ad-do-it))
 
-;; ------------------------------------------------------------- [ ipython ]
-(require 'ipython)
-(setq python-python-command "~/environment/python/2.5/bin/ipython")
-(setq py-python-command-args '( "-colors" "Linux"))
+(require 'python-mode)
+
+;; Initialize Pymacs
+(require 'pymacs)
+(setenv "PYMACS_PYTHON" "~/environment/python/2.5/bin/python")
+
+;; Initialize Rope
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
+
+(provide 'python-programming)
+
+;;(require 'pycomplete)
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+
+;;(require 'ipython)
+;;(setq python-python-command "~/environment/python/2.5/bin/ipython")
+;;(setq py-python-command-args '( "-colors" "Linux"))
 
 
 ;; ----------------------------------------------------------- [ ibuffer ]
@@ -491,10 +516,11 @@ type of version control found in that directory"
   (interactive)
   (local-set-key '[f4] 'pdb)
   (setq tab-width 2)
-  (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)
+  ;;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)
   (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
   (setq python-indent 2)
   (setq python-continuation-offset 2)
+  (eldoc-mode 1)
   (setq py-smart-indentation nil))
   ;;(my-start-scripting-mode "py" "#!/usr/bin/python"))
 
@@ -507,11 +533,6 @@ type of version control found in that directory"
   (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
 
 (add-hook 'ipython-shell-hook 'my-ipython-startup)
-
-
-;; ---------------------------------------------------- [ ElDoc startup ]
-(add-hook 'python-mode-hook
-          '(lambda () (eldoc-mode 1)) t)
 
 
 ;; ---------------------------------------------------- [ Tidy startup ]
@@ -550,6 +571,14 @@ type of version control found in that directory"
   (local-set-key "\C-o" 'ff-get-other-file))
 
 (add-hook 'c-mode-hook 'my-c-startup)
+
+
+;; --------------------------------------------------------- [ Autocomplete ]
+(defun my-autocomplete-startup ()
+  "Autcomplete default settings."
+  (setq-default ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
+
+(add-hook 'autcomplete-mode-hook 'my-autocomplete-startup)
 
 
 ;; ------------------------------------------------ [ Emacs Lisp Startup ]

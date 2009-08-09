@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/python-mode/!svn/ver/422/trunk/python-mode/website
+END
+index.ht
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/python-mode/!svn/ver/414/trunk/python-mode/website/index.ht
+END
+.rsync-excludes
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/python-mode/!svn/ver/414/trunk/python-mode/website/.rsync-excludes
+END
+links.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/python-mode/!svn/ver/414/trunk/python-mode/website/links.h
+END
+make.rules
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/python-mode/!svn/ver/419/trunk/python-mode/website/make.rules
+END
+PMGenerator.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/python-mode/!svn/ver/418/trunk/python-mode/website/PMGenerator.py
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/python-mode/!svn/ver/421/trunk/python-mode/website/.cvsignore
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/python-mode/!svn/ver/422/trunk/python-mode/website/Makefile
+END
+calcroot.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/python-mode/!svn/ver/414/trunk/python-mode/website/calcroot.py
+END
