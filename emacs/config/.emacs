@@ -33,7 +33,12 @@
 (add-to-list 'load-path "~/environment/emacs/modes/cperl-mode")
 (add-to-list 'load-path "~/environment/emacs/modes/python-mode")
 (add-to-list 'load-path "~/environment/emacs/modes/yasnippet")
+(add-to-list 'load-path "~/environment/emacs/modes/ecb")
+(add-to-list 'load-path "~/environment/emacs/modes/cedet/common")
+
 (setq byte-compile-warnings nil)
+
+;;(load-file "~/environment/emacs/modes/cedet/common/cedet.el") ;; load cedet
 
 
 ;; -----------------------------------------------------------------------
@@ -69,6 +74,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(ecb-options-version "2.40")
  '(only-global-abbrevs t))
 
 (custom-set-faces
@@ -118,6 +124,7 @@ File suffix is used to determine what program to run."
     (shell-command cmd-str)))
 
 (global-set-key (kbd "<f7>") 'run-current-file)
+
 
 ;; -----------------------------------------------------------------------
 ;; Autoloads (aka, the way to make emacs fast)
@@ -206,6 +213,9 @@ File suffix is used to determine what program to run."
 
 (fset 'yes-or-no-p 'y-or-n-p) ;; Make all yes-or-no questions as y-or-n
 
+;; delete trailing whitespace before saving:
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 
 ;; -----------------------------------------------------------------------
 ;; Modules loaded at startup (and their configuration)
@@ -213,6 +223,10 @@ File suffix is used to determine what program to run."
 ;; ---------------------------------------------------------- [ ido-mode ]
 (require 'ido)
 (ido-mode t)
+
+
+;; ---------------------------------------------------------- [ ediff ]
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 
 ;; ---------------------------------------------------------- [ anything ]
@@ -238,7 +252,7 @@ File suffix is used to determine what program to run."
   '(diminish 'doxymacs-mode "dox"))
 
 
-;; -------------------------------------------------------- [ backup-dir ]
+;; ------------------------------------------------------------- [ backup-dir ]
 ;; Changes the location where backup files are placed. Instead of
 ;; being spread out all over the filesystem, they're now placed in one
 ;; location.
@@ -262,7 +276,7 @@ File suffix is used to determine what program to run."
 (global-set-key '[M-kp-2]  'pager-row-down)
 
 
-;; -------------------------------------------------- [ browse-kill-ring ]
+;; ------------------------------------------------------------- [ browse-kill-ring ]
 ;; Select something that you put in the kill ring ages ago.
 (autoload 'browse-kill-ring "browse-kill-ring" "Browse the kill ring." t)
 (global-set-key (kbd "C-c k") 'browse-kill-ring)
@@ -291,6 +305,8 @@ File suffix is used to determine what program to run."
 ;; ------------------------------------------------------------- [ yasnippet ]
 (require 'yasnippet)
 (yas/initialize)
+;;(set-face-background  'yas/field-highlight-face "Grey10")
+;;(set-face-background  'yas/mirror-highlight-face "Grey10")
 (yas/load-directory "~/environment/emacs/modes/yasnippet/snippets")
 
 
@@ -388,6 +404,25 @@ File suffix is used to determine what program to run."
   (interactive "*")
   (or (tempo-expand-if-complete)
 	  (insert " ")))
+
+
+;; ------------------------------------------------------------- [ cedet ]
+;; require the main cedet mode
+(require 'cedet)
+(global-ede-mode t)
+(require 'semantic-ia)
+
+
+;; ------------------------------------------------------------- [ ecb ]
+(require 'ecb)
+
+
+;; ------------------------------------------------------------- [ saveplace ]
+;; instead of save desktop, rather save last editing place in files,
+;; as well as minibuffer:
+(require 'saveplace)
+(setq-default save-place t)
+(savehist-mode t)
 
 
 ;; -----------------------------------------------------------------------
@@ -597,7 +632,22 @@ type of version control found in that directory"
   (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
   (setq python-indent 2)
   (setq python-continuation-offset 2)
-  (eldoc-mode 1)
+  ;;(eldoc-mode 1)
+
+  ;; remove trailing whitespace
+  (setq show-trailing-whitespace t)
+
+  ;; python mode combined with outline minor mode:
+  (outline-minor-mode 1)
+  (setq outline-regexp "def\\|class ")
+  (setq coding-system-for-write 'utf-8)
+  (local-set-key "\C-c\C-a" 'show-all)
+  (local-set-key "\C-c\C-t" 'hide-body)
+  (local-set-key "\C-c\C-s" 'outline-toggle-children)
+
+  ;; which function am I editing?
+  (when (>= emacs-major-version 23)
+    (which-function-mode t))
 
   (auto-complete-mode 1)
   (set (make-local-variable 'ac-sources)
@@ -615,16 +665,70 @@ type of version control found in that directory"
 ;; ---------------------------------------------------- [ IPython startup ]
 (defun my-ipython-startup ()
   "Setup IPython shell hook."
-  (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
+
+  ;; comint mode:
+  (require 'comint)
+  (define-key comint-mode-map [(control p)]
+    'comint-previous-matching-input-from-input)
+  (define-key comint-mode-map [(control n)]
+    'comint-next-matching-input-from-input)
+  (define-key comint-mode-map [(control meta n)]
+    'comint-next-input)
+  (define-key comint-mode-map [(control meta p)]
+    'comint-previous-input)
+  )
+
+  ;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
 
 (add-hook 'ipython-shell-hook 'my-ipython-startup)
 
 
 ;; ---------------------------------------------------- [ Tidy startup ]
 (defun my-tidy-startup ()
+  "Tidy temp."
   '(tidy-temp-directory "~/.tidy/temp"))
 
 (add-hook 'tidy-mode-hook 'my-tidy-startup)
+
+
+;; ---------------------------------------------------- [ Ecb startup ]
+(defun my-ecb-startup ()
+  "Ecb startup."
+  (setq semantic-load-turn-useful-things-on t)
+  (setq global-semantic-show-tag-boundaries-mode nil)
+  (setq global-semantic-show-parser-state-mode nil)
+  (setq semanticdb-default-save-directory "/tmp")
+  (setq semanticdb-global-mode nil)
+  (setq semanticdb-persistent-path (quote (never)))
+  (semantic-load-enable-code-helpers)
+  (global-semantic-auto-parse-mode -1)
+  (global-semantic-show-unmatched-syntax-mode -1)
+  (setq truncate-partial-width-windows nil))
+
+(add-hook 'ecb-mode-hook 'my-ecb-startup)
+
+
+;; ---------------------------------------------------- [ Eshell startup ]
+;; eshell C-a to jump to command start only:
+(defun eshell-maybe-bol ()
+  "C-a goes to the beginning of command, not beginning of line."
+  (interactive)
+  (let ((p (point)))
+    (eshell-bol)
+    (if (= p (point))
+      (beginning-of-line))))
+
+(defun my-eshell-startup ()
+  (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)
+
+  ;; eshell to launch certain apps in ansi-term:
+  (require 'em-term)
+  (add-to-list 'eshell-visual-commands "vim")
+
+  ;; eshell completion to behave like bash:
+  (setq eshell-cmpl-cycle-completions nil))
+
+(add-hook 'eshell-mode-hook 'my-eshell-startup)
 
 
 ;; ---------------------------------------------------- [ Html startup ]
@@ -662,6 +766,19 @@ type of version control found in that directory"
 (defun my-autocomplete-startup ()
   "Autcomplete default settings."
   (setq-default ac-sources '(ac-source-abbrev ac-source-words-in-buffer))
+  (require 'auto-complete-yasnippet)
+  (require 'auto-complete-semantic)
+  (require 'auto-complete-css)
+
+  (set-face-foreground 'ac-menu-face "wheat")
+  (set-face-background 'ac-menu-face "darkslategrey")
+  (set-face-underline 'ac-menu-face "wheat")
+  (set-face-foreground 'ac-selection-face "white")
+  (set-face-background 'ac-selection-face "darkolivegreen")
+  (setq ac-auto-start 4) ; start auto-completion after 4 chars only
+  (global-set-key "\C-c1" 'auto-complete-mode) ; easy key to toggle AC on/off
+  (define-key ac-complete-mode-map "\t" 'ac-complete)
+  (define-key ac-complete-mode-map "\r" nil)
 
   ;; Use C-n/C-p to select candidates
   (define-key ac-complete-mode-map "\C-n" 'ac-next)
