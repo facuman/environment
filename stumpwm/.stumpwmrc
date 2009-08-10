@@ -57,18 +57,18 @@
 ;; (run-shell-command "xmodmap -e \'keycode 135 = F20\'")
 ;; (set-prefix-key (kbd "F20"))
 
-(define-key *top-map* (kbd "s-RET") 
+(define-key *top-map* (kbd "s-RET")
 ;;  "exec urxvt +sb -fn \"xft:Bitstream Vera Sans Mono:pixelsize=12\"")
   "exec urxvtc +sb")
 
 ;; Lock screen
-(define-key *root-map* (kbd "s-F2") "exec xscreensaver-command -lock") 
+(define-key *root-map* (kbd "s-F2") "exec xscreensaver-command -lock")
 
 ;; Kill windows
 (define-key *top-map* (kbd "s-C") "delete")
 
 (define-key *root-map* (kbd "C-q") "quit")
-(run-shell-command (concatenate 'string "xloadimage -onroot /home/fdeguzman/.backgrounds/01155_dharmainitiative_1280x800.jpg")) 
+(run-shell-command (concatenate 'string "xloadimage -onroot /home/fdeguzman/.backgrounds/01155_dharmainitiative_1280x800.jpg"))
 (run-shell-command (concatenate 'string "xscreensaver-command -exit; xscreensaver -no-splash &"))
 ;; (define-key *root-map* (kbd "g f") "gnew-float")
 
@@ -78,13 +78,13 @@
 ;; Top keys
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "exec amixer set Master 3- unmute")
 (define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec amixer set Master 3+ unmute")
-(define-key *top-map* (kbd "XF86AudioMute") "exec amixer set 'Master' toggle") 
+(define-key *top-map* (kbd "XF86AudioMute") "exec amixer set 'Master' toggle")
 
 (define-key *root-map* (kbd "C-p") "exec xpdf")
 (define-key *top-map* (kbd "s-Right") "gnext")
 (define-key *top-map* (kbd "s-Left") "gprev")
 (define-key *top-map* (kbd "s-F7") "exec xrandr --output LVDS1 --mode 1280x800  --primary --output VGA1 --auto --below LVDS1")
-(define-key *top-map* (kbd "s-F8") "exec xrandr --output VGA1 --auto --same-as LVDS1")
+(define-key *top-map* (kbd "s-F8") "exec xrandr --output VGA1 --off")
 (define-key *root-map* (kbd "u") "prev")
 (define-key *top-map* (kbd "s-F2") "exec xscreensaver-command -lock")
 (define-key *top-map* (kbd "s-q") "quit")

@@ -345,8 +345,8 @@ File suffix is used to determine what program to run."
 (autoload 'pymacs-load "pymacs" nil t)
 
 (require 'ipython)
-(setq python-python-command "~/environment/python/2.5/bin/ipython")
-(setq py-python-command-args '( " -colors " " Linux "))
+(setq py-python-command "~/environment/python/2.5/bin/ipython")
+(setq py-python-command-args '( "-colors" "Linux"))
 
 
 ;; ----------------------------------------------------------- [ ibuffer ]
@@ -660,19 +660,18 @@ type of version control found in that directory"
     (which-function-mode t))
 
   ;; autocomplete in python
-  (auto-complete-mode 1)
+  (auto-complete-mode)
+;;  (auto-complete-mode 1)
 
-  (add-to-list 'ac-omni-completion-sources
-    (cons "\\." '(ac-source-semantic)))
-  (add-to-list 'ac-omni-completion-sources
-    (cons "->" '(ac-source-semantic)))
-  (setq ac-sources '(ac-source-semantic ac-source-yasnippet))
+  ;;(add-to-list 'ac-omni-completion-sources
+  ;;  (cons "\\." '(ac-source-semantic)))
+  ;;(add-to-list 'ac-omni-completion-sources
+  ;;  (cons "->" '(ac-source-semantic)))
+  (setq ac-sources '(ac-source-semantic
+                     ac-source-words-in-buffer
+                     ac-source-ropemacs))
+;;                     ac-source-yasnippet))
 
-  ;;(set (make-local-variable 'ac-sources)
-  ;;   (append ac-sources '(ac-source-rope) '(ac-source-yasnippet)))
-  ;;(set (make-local-variable 'ac-find-function) 'ac-python-find)
-  ;;(set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
-  ;;(set (make-local-variable 'ac-auto-start) nil)
 
   (setq py-smart-indentation nil))
   ;;(my-start-scripting-mode "py" "#!/usr/bin/python"))
@@ -787,6 +786,7 @@ type of version control found in that directory"
   (require 'auto-complete-yasnippet)
   (require 'auto-complete-semantic)
   (require 'auto-complete-css)
+  (require 'auto-complete-python)
 
   ;;(set-face-foreground 'ac-menu-face "wheat")
   ;;(set-face-background 'ac-menu-face "darkslategrey")
@@ -801,7 +801,7 @@ type of version control found in that directory"
   ;; Use C-n/C-p to select candidates
   (define-key ac-complete-mode-map "\C-n" 'ac-next)
   (define-key ac-complete-mode-map "\C-p" 'ac-previous))
-}
+
 (add-hook 'auto-complete-mode-hook 'my-auto-complete-startup)
 
 
