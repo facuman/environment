@@ -313,6 +313,9 @@ File suffix is used to determine what program to run."
 
 
 ;; ------------------------------------------------------------- [ cperl ]
+;;; cperl-mode is preferred to perl-mode
+(defalias 'perl-mode 'cperl-mode)
+
 (eval-after-load "cperl"
   '(progn
      (setq cperl-hairy t)))
@@ -634,14 +637,14 @@ type of version control found in that directory"
   "Setup perl."
   (interactive)
   (local-set-key '[pause] 'perldb)
-  (setq gud-perldb-command-name "perl -w ") ; For warnings
+  (setq gud-perldb-command-name "~/environment/binaries/ActivePerl-5.8/bin/perl -w ") ; For warnings
   (setq tab-width 8)
   (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
   (setq perl-indent-level 2)
   (setq perl-tab-always-indent nil) ; Indent if at left margin, else tab
   (setq perl-continued-statement-offset 2)
-  (setq perl-continued-brace-offset -2)
-  (my-start-scripting-mode "pl" "#!/usr/bin/perl"))
+  (setq perl-continued-brace-offset -2))
+  ;;(my-start-scripting-mode "pl" "#!/usr/bin/perl"))
 
 (add-hook 'cperl-mode-hook 'my-perl-startup)
 
