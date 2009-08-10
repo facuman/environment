@@ -31,7 +31,7 @@
 (add-to-list 'load-path "~/environment/emacs/modes/")
 (add-to-list 'load-path "~/environment/emacs/modes/anything-config")
 (add-to-list 'load-path "~/environment/emacs/modes/cperl-mode")
-(add-to-list 'load-path "~/environment/emacs/modes/python-mode")
+;;(add-to-list 'load-path "~/environment/emacs/modes/python-mode")
 (add-to-list 'load-path "~/environment/emacs/modes/yasnippet")
 (add-to-list 'load-path "~/environment/emacs/modes/ecb")
 (add-to-list 'load-path "~/environment/emacs/modes/cedet/common")
@@ -135,7 +135,8 @@ File suffix is used to determine what program to run."
 (autoload 'make-regexp "make-regexp"
   "Return a regexp to match a string item in STRINGS." t)
 (autoload 'make-regexps "make-regexp"  "Return a regexp to REGEXPS." t)
-(autoload 'git-status "git" "Git status mode." t)
+(autoload 'magit-status "magit" "Git status mode" t)
+;;(autoload 'git-status "git" "Git status mode." t)
 (autoload 'svn-status "psvn" "Psvn.el status mode." t)
 
 ;; Tidy mode settings
@@ -201,6 +202,11 @@ File suffix is used to determine what program to run."
       default-tab-width 4
       default-fill-column 79
       frame-title-format (concat user-login-name "@" system-name))
+
+;; display time in status bar:
+(setq display-time-24hr-format t)
+(setq display-time-day-and-date t)
+(display-time)
 
 (add-hook 'suspend-hook 'do-auto-save) ;; Auto-Save on ^Z
 
@@ -316,7 +322,7 @@ File suffix is used to determine what program to run."
   "return focus to python code buffer"
   (save-excursion ad-do-it))
 
-(require 'python-mode)
+(require 'python)
 
 ;; Initialize Pymacs
 (require 'pymacs)
@@ -653,12 +659,20 @@ type of version control found in that directory"
   (when (>= emacs-major-version 23)
     (which-function-mode t))
 
+  ;; autocomplete in python
   (auto-complete-mode 1)
-  (set (make-local-variable 'ac-sources)
-     (append ac-sources '(ac-source-rope) '(ac-source-yasnippet)))
-  (set (make-local-variable 'ac-find-function) 'ac-python-find)
-  (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
-  (set (make-local-variable 'ac-auto-start) nil)
+
+  (add-to-list 'ac-omni-completion-sources
+    (cons "\\." '(ac-source-semantic)))
+  (add-to-list 'ac-omni-completion-sources
+    (cons "->" '(ac-source-semantic)))
+  (setq ac-sources '(ac-source-semantic ac-source-yasnippet))
+
+  ;;(set (make-local-variable 'ac-sources)
+  ;;   (append ac-sources '(ac-source-rope) '(ac-source-yasnippet)))
+  ;;(set (make-local-variable 'ac-find-function) 'ac-python-find)
+  ;;(set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
+  ;;(set (make-local-variable 'ac-auto-start) nil)
 
   (setq py-smart-indentation nil))
   ;;(my-start-scripting-mode "py" "#!/usr/bin/python"))
@@ -767,19 +781,19 @@ type of version control found in that directory"
 
 
 ;; --------------------------------------------------------- [ Autocomplete ]
-(defun my-autocomplete-startup ()
+(defun my-auto-complete-startup ()
   "Autcomplete default settings."
   (setq-default ac-sources '(ac-source-abbrev ac-source-words-in-buffer))
   (require 'auto-complete-yasnippet)
   (require 'auto-complete-semantic)
   (require 'auto-complete-css)
 
-  (set-face-foreground 'ac-menu-face "wheat")
-  (set-face-background 'ac-menu-face "darkslategrey")
-  (set-face-underline 'ac-menu-face "wheat")
-  (set-face-foreground 'ac-selection-face "white")
-  (set-face-background 'ac-selection-face "darkolivegreen")
-  (setq ac-auto-start 4) ; start auto-completion after 4 chars only
+  ;;(set-face-foreground 'ac-menu-face "wheat")
+  ;;(set-face-background 'ac-menu-face "darkslategrey")
+  ;;(set-face-underline 'ac-menu-face "wheat")
+  ;;(set-face-foreground 'ac-selection-face "white")
+  ;;(set-face-background 'ac-selection-face "darkolivegreen")
+  (setq ac-auto-start 2) ; start auto-completion after 4 chars only
   (global-set-key "\C-c1" 'auto-complete-mode) ; easy key to toggle AC on/off
   (define-key ac-complete-mode-map "\t" 'ac-complete)
   (define-key ac-complete-mode-map "\r" nil)
@@ -787,8 +801,8 @@ type of version control found in that directory"
   ;; Use C-n/C-p to select candidates
   (define-key ac-complete-mode-map "\C-n" 'ac-next)
   (define-key ac-complete-mode-map "\C-p" 'ac-previous))
-
-(add-hook 'autcomplete-mode-hook 'my-autocomplete-startup)
+}
+(add-hook 'auto-complete-mode-hook 'my-auto-complete-startup)
 
 
 ;; ------------------------------------------------ [ Emacs Lisp Startup ]
@@ -838,3 +852,4 @@ type of version control found in that directory"
   ;;(flyspell-mode t))
 
 (add-hook 'svn-log-edit-mode-hook 'my-svn-load-edit-mode-startup)
+
