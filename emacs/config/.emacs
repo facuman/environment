@@ -278,8 +278,11 @@ File suffix is used to determine what program to run."
 ;; being spread out all over the filesystem, they're now placed in one
 ;; location.
 (if (file-accessible-directory-p (expand-file-name "~/.Trash"))
-	(add-to-list 'backup-directory-alist
-				 (cons "." (expand-file-name "~/.Trash/emacs-backups/"))))
+    (add-to-list 'backup-directory-alist
+                 (cons "." (expand-file-name "~/.Trash/emacs-backups/")))
+    (add-to-list 'auto-save-file-name-transforms
+                 (cons "." (expand-file-name "~/.Trash/emacs-autosaves/"))))
+
 
 
 ;; ------------------------------------------------------------- [ pager ]
