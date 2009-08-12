@@ -236,6 +236,11 @@ File suffix is used to determine what program to run."
 (ido-mode t)
 
 
+;; ---------------------------------------------------------- [ dired ]
+;; alias rn to be able to edit a dired buffer as a normal text buffer
+(defalias 'rn 'wdired-change-to-wdired-mode)
+
+
 ;; ---------------------------------------------------------- [ ediff ]
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
@@ -632,6 +637,21 @@ type of version control found in that directory"
   ;;(my-start-scripting-mode "py" "#!/usr/bin/python"))
 
 (add-hook 'python-mode-hook 'my-python-startup)
+
+
+;; ---------------------------------------------------- [ dired startup ]
+(defun my-dired-startup ()
+  ;; Enable the dired-find-alternate-file command
+  (put 'dired-find-alternate-file 'disabled nil)
+
+  ;; Allow 'Enter' and '^' to use the same buffer
+  (define-key dired-mode-map (kbd "<return>")
+    'dired-find-alternate-file) ; was dired-advertised-find-file
+  (define-key dired-mode-map (kbd "^")
+    (lambda () (interactive) (find-alternate-file ".."))))
+  ; was dired-up-directory
+
+(add-hook 'dired-mode-hook 'my-dired-startup)
 
 
 ;; ---------------------------------------------------- [ IPython startup ]
