@@ -237,6 +237,12 @@ File suffix is used to determine what program to run."
 (global-set-key (kbd "M-1") 'delete-other-windows) ; was digit-argument
 (global-set-key (kbd "M-s") 'other-window) ; was center-line
 
+;; open keyboard shortcut image with F8 key
+(global-set-key (kbd "<f8>")
+  (lambda ()
+    (interactive)
+    (find-file "~/environment/emacs/modes/ergonomic_emacs_layout_qwerty.png")))
+
 
 
 ;; -----------------------------------------------------------------------
