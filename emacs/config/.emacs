@@ -226,6 +226,9 @@ File suffix is used to determine what program to run."
     (shell-command "xmodmap -e 'clear Lock' -e 'keycode 66 = F13'"))
 (global-set-key [f13] 'execute-extended-command)
 
+;; use ergonomic key shortcuts
+(load-file "~/environment/emacs/modes/ergonomic_keybinding_qwerty.el")
+
 ;; bind goto line to M-x g
 (global-set-key "\M-g" 'goto-line)
 
