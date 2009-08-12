@@ -8,6 +8,9 @@
 ;;        --> http://www.elliotglaysher.org/emacs.html
 ;;   + Python settings mostly from:
 ;;        --> http://www.enigmacurry.com/
+;;   + Some dired tips and useful keybindings
+;;        --> http://xahlee.org/emacs/effective_emacs.html
+;;   + Several other sources... credit were it's due. Thx ^_^
 ;; -----------------------------------------------------------------------
 
 ;; -----------------------------------------------------------------------
@@ -216,7 +219,6 @@ File suffix is used to determine what program to run."
 ;; delete trailing whitespace before saving:
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-
 ;; bind Caps-Lock to M-x
 ;; http://sachachua.com/wp/2008/08/04/emacs-caps-lock-as-m-x/
 ;; of course, this disables normal Caps-Lock for *all* apps...
@@ -226,6 +228,12 @@ File suffix is used to determine what program to run."
 
 ;; bind goto line to M-x g
 (global-set-key "\M-g" 'goto-line)
+
+;;; window splitting keybindings
+(global-set-key (kbd "M-2") 'split-window-vertically) ; was digit-argument
+(global-set-key (kbd "M-1") 'delete-other-windows) ; was digit-argument
+(global-set-key (kbd "M-s") 'other-window) ; was center-line
+
 
 
 ;; -----------------------------------------------------------------------
