@@ -199,6 +199,17 @@ File suffix is used to determine what program to run."
       default-fill-column 79
       frame-title-format (concat user-login-name "@" system-name))
 
+;; set font
+;; (set-default-font "Bitstream Vera Sans Mono-10")
+(set-default-font "Bitstream Vera Sans Mono-10")
+(set-fontset-font (frame-parameter nil 'font)
+	'han '("cwTeXHeiBold" . "unicode-bmp"))
+
+;; disable toolbars
+(menu-bar-mode nil)
+(tool-bar-mode nil)
+(scroll-bar-mode nil)
+
 ;; display time in status bar:
 (setq display-time-24hr-format t)
 (setq display-time-day-and-date t)

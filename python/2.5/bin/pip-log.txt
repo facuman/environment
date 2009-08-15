@@ -1,0 +1,23 @@
+Downloading/unpacking Peach
+  Getting page http://pypi.python.org/simple/Peach
+  Could not fetch URL http://pypi.python.org/simple/Peach: HTTP Error 404: Not Found
+  Will skip URL http://pypi.python.org/simple/Peach when looking for download links for Peach
+  Getting page http://pypi.python.org/simple/
+  URLs to search for versions for Peach:
+  * http://pypi.python.org/simple/Peach/
+  Getting page http://pypi.python.org/simple/Peach/
+  Could not fetch URL http://pypi.python.org/simple/Peach/: HTTP Error 404: Not Found
+  Will skip URL http://pypi.python.org/simple/Peach/ when looking for download links for Peach
+  Could not find any downloads that satisfy the requirement Peach
+No distributions at all found for Peach
+Exception information:
+Traceback (most recent call last):
+  File "/home/fdeguzman/environment/python/2.5/lib/python2.5/site-packages/pip-0.4-py2.5.egg/pip.py", line 274, in main
+    self.run(options, args)
+  File "/home/fdeguzman/environment/python/2.5/lib/python2.5/site-packages/pip-0.4-py2.5.egg/pip.py", line 431, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/home/fdeguzman/environment/python/2.5/lib/python2.5/site-packages/pip-0.4-py2.5.egg/pip.py", line 1813, in install_files
+    url = finder.find_requirement(req_to_install, upgrade=self.upgrade)
+  File "/home/fdeguzman/environment/python/2.5/lib/python2.5/site-packages/pip-0.4-py2.5.egg/pip.py", line 1086, in find_requirement
+    raise DistributionNotFound('No distributions at all found for %s' % req)
+DistributionNotFound: No distributions at all found for Peach
