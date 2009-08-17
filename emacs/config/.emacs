@@ -491,6 +491,11 @@ File suffix is used to determine what program to run."
 (setq-default save-place t)
 (savehist-mode t)
 
+;; ------------------------------------------------------------- [ desktop ]
+;; let's try the desktop feature
+(desktop-load-default)
+(desktop-read)
+
 
 ;; -----------------------------------------------------------------------
 ;; Utility Methods
