@@ -401,9 +401,13 @@ File suffix is used to determine what program to run."
 (autoload 'pymacs-exec "pymacs" nil t)
 (autoload 'pymacs-load "pymacs" nil t)
 
-(require 'ipython)
+
+(setq ipython-command "~/environment/python/2.5/bin/ipython")
 (setq py-python-command "~/environment/python/2.5/bin/ipython")
-(setq py-python-command-args '( "-colors" "Linux"))
+;;(setq py-python-command-args '("-pylab" "-colors" "Linux"))
+(require 'ipython)
+;;(setq py-python-command "~/environment/python/2.5/bin/ipython")
+;;(setq py-python-command-args '( "-colors" "Linux"))
 
 
 ;; ----------------------------------------------------------- [ ibuffer ]
@@ -650,10 +654,10 @@ type of version control found in that directory"
   "Setup Python style."
   (interactive)
   (local-set-key '[f4] 'pdb)
-  (setq tab-width 2)
+  (setq tab-width 4)
   ;;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)
   (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
-  (setq python-indent 2)
+  (setq python-indent 4)
   (setq python-continuation-offset 2)
   ;;(eldoc-mode 1)
 
@@ -710,6 +714,8 @@ type of version control found in that directory"
 ;; ---------------------------------------------------- [ IPython startup ]
 (defun my-ipython-startup ()
   "Setup IPython shell hook."
+  ;;
+(interactive)
 
   ;; comint mode:
   (require 'comint)
@@ -721,7 +727,8 @@ type of version control found in that directory"
     'comint-next-input)
   (define-key comint-mode-map [(control meta p)]
     'comint-previous-input)
-  )
+  (local-unset-key (kbd "<tab>"))
+  (local-set-key (kbd "s") 'other-window))
 
   ;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
 

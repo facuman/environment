@@ -1,0 +1,563 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/1381/trunk/src/jvm/clojure/lang
+END
+SeqEnumeration.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/SeqEnumeration.java
+END
+IMeta.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1197/trunk/src/jvm/clojure/lang/IMeta.java
+END
+Atom.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1308/trunk/src/jvm/clojure/lang/Atom.java
+END
+ISeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/ISeq.java
+END
+Repl.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1191/trunk/src/jvm/clojure/lang/Repl.java
+END
+LineNumberingPushbackReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/1189/trunk/src/jvm/clojure/lang/LineNumberingPushbackReader.java
+END
+SeqIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/SeqIterator.java
+END
+IChunkedSeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1377/trunk/src/jvm/clojure/lang/IChunkedSeq.java
+END
+Settable.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1197/trunk/src/jvm/clojure/lang/Settable.java
+END
+Fn.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Fn.java
+END
+Script.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1191/trunk/src/jvm/clojure/lang/Script.java
+END
+ChunkedCons.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1377/trunk/src/jvm/clojure/lang/ChunkedCons.java
+END
+PersistentQueue.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentQueue.java
+END
+Obj.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Obj.java
+END
+Associative.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Associative.java
+END
+Sequential.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Sequential.java
+END
+MultiFn.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1340/trunk/src/jvm/clojure/lang/MultiFn.java
+END
+PersistentHashSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentHashSet.java
+END
+Keyword.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1310/trunk/src/jvm/clojure/lang/Keyword.java
+END
+ArraySeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/ArraySeq.java
+END
+LockingTransaction.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1308/trunk/src/jvm/clojure/lang/LockingTransaction.java
+END
+Namespace.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1366/trunk/src/jvm/clojure/lang/Namespace.java
+END
+PersistentTreeSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentTreeSet.java
+END
+PersistentArrayMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentArrayMap.java
+END
+APersistentMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/APersistentMap.java
+END
+Counted.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1268/trunk/src/jvm/clojure/lang/Counted.java
+END
+Cons.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1300/trunk/src/jvm/clojure/lang/Cons.java
+END
+ChunkBuffer.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1379/trunk/src/jvm/clojure/lang/ChunkBuffer.java
+END
+PersistentStructMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentStructMap.java
+END
+AFn.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/AFn.java
+END
+IPersistentMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1268/trunk/src/jvm/clojure/lang/IPersistentMap.java
+END
+Compiler.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1375/trunk/src/jvm/clojure/lang/Compiler.java
+END
+Seqable.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/Seqable.java
+END
+IFn.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/IFn.java
+END
+ARef.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1308/trunk/src/jvm/clojure/lang/ARef.java
+END
+APersistentVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1326/trunk/src/jvm/clojure/lang/APersistentVector.java
+END
+RT.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/1378/trunk/src/jvm/clojure/lang/RT.java
+END
+IRef.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1308/trunk/src/jvm/clojure/lang/IRef.java
+END
+Box.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1193/trunk/src/jvm/clojure/lang/Box.java
+END
+LispReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1347/trunk/src/jvm/clojure/lang/LispReader.java
+END
+IPersistentVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1377/trunk/src/jvm/clojure/lang/IPersistentVector.java
+END
+PersistentList.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1298/trunk/src/jvm/clojure/lang/PersistentList.java
+END
+IDeref.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1253/trunk/src/jvm/clojure/lang/IDeref.java
+END
+AReference.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1197/trunk/src/jvm/clojure/lang/AReference.java
+END
+IPersistentStack.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/IPersistentStack.java
+END
+EnumerationSeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/EnumerationSeq.java
+END
+AMapEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/AMapEntry.java
+END
+DynamicClassLoader.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1192/trunk/src/jvm/clojure/lang/DynamicClassLoader.java
+END
+RestFn.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/RestFn.java
+END
+IteratorSeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/IteratorSeq.java
+END
+PersistentHashMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentHashMap.java
+END
+IteratorStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1326/trunk/src/jvm/clojure/lang/IteratorStream.java
+END
+ArrayChunk.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1379/trunk/src/jvm/clojure/lang/ArrayChunk.java
+END
+IReference.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1197/trunk/src/jvm/clojure/lang/IReference.java
+END
+IMapEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/IMapEntry.java
+END
+Binding.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Binding.java
+END
+Numbers.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1380/trunk/src/jvm/clojure/lang/Numbers.java
+END
+PersistentTreeMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/PersistentTreeMap.java
+END
+StringSeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/StringSeq.java
+END
+IObj.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1193/trunk/src/jvm/clojure/lang/IObj.java
+END
+PersistentVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1381/trunk/src/jvm/clojure/lang/PersistentVector.java
+END
+Named.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Named.java
+END
+IPersistentCollection.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/IPersistentCollection.java
+END
+Reflector.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1371/trunk/src/jvm/clojure/lang/Reflector.java
+END
+AFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1162/trunk/src/jvm/clojure/lang/AFunction.java
+END
+LazySeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1377/trunk/src/jvm/clojure/lang/LazySeq.java
+END
+Compile.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1260/trunk/src/jvm/clojure/lang/Compile.java
+END
+Range.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1326/trunk/src/jvm/clojure/lang/Range.java
+END
+Delay.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1253/trunk/src/jvm/clojure/lang/Delay.java
+END
+XMLHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/XMLHandler.java
+END
+MapEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/MapEntry.java
+END
+Sorted.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Sorted.java
+END
+Reversible.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Reversible.java
+END
+TransactionalHashMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/1253/trunk/src/jvm/clojure/lang/TransactionalHashMap.java
+END
+Symbol.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/Symbol.java
+END
+IPersistentList.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/IPersistentList.java
+END
+LazilyPersistentVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/1381/trunk/src/jvm/clojure/lang/LazilyPersistentVector.java
+END
+Ref.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1253/trunk/src/jvm/clojure/lang/Ref.java
+END
+APersistentSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1287/trunk/src/jvm/clojure/lang/APersistentSet.java
+END
+Util.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1215/trunk/src/jvm/clojure/lang/Util.java
+END
+Ratio.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1256/trunk/src/jvm/clojure/lang/Ratio.java
+END
+ProxyHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/ProxyHandler.java
+END
+Streamable.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1326/trunk/src/jvm/clojure/lang/Streamable.java
+END
+IReduce.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/IReduce.java
+END
+Indexed.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1377/trunk/src/jvm/clojure/lang/Indexed.java
+END
+IPersistentSet.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1268/trunk/src/jvm/clojure/lang/IPersistentSet.java
+END
+Var.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1308/trunk/src/jvm/clojure/lang/Var.java
+END
+ASeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1331/trunk/src/jvm/clojure/lang/ASeq.java
+END
+IndexedSeq.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1268/trunk/src/jvm/clojure/lang/IndexedSeq.java
+END
+IProxy.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1160/trunk/src/jvm/clojure/lang/IProxy.java
+END
+ArrayStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1326/trunk/src/jvm/clojure/lang/ArrayStream.java
+END
+Stream.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1355/trunk/src/jvm/clojure/lang/Stream.java
+END
+Agent.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1316/trunk/src/jvm/clojure/lang/Agent.java
+END

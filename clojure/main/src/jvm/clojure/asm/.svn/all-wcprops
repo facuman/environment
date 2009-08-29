@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm
+END
+MethodVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/MethodVisitor.java
+END
+ClassWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/ClassWriter.java
+END
+Attribute.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Attribute.java
+END
+FieldVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/FieldVisitor.java
+END
+Edge.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Edge.java
+END
+ClassAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/ClassAdapter.java
+END
+AnnotationWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/AnnotationWriter.java
+END
+MethodWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/MethodWriter.java
+END
+Handler.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Handler.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/package.html
+END
+Label.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Label.java
+END
+FieldWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/FieldWriter.java
+END
+Type.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Type.java
+END
+MethodAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/MethodAdapter.java
+END
+ClassVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/ClassVisitor.java
+END
+ByteVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/ByteVector.java
+END
+ClassReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/ClassReader.java
+END
+Frame.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Frame.java
+END
+AnnotationVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/AnnotationVisitor.java
+END
+Opcodes.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Opcodes.java
+END
+Item.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/Item.java
+END

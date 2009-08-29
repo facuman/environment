@@ -1,0 +1,19 @@
+Some platforms, such as Mac OS X, do not ship with GNU readline installed. The
+readline extension module in the standard library of Mac 'system' Python uses
+NetBSD's editline (libedit) library instead, which is a readline replacement with 
+a less restrictive software license.
+
+As the alternatives to GNU readline do not have fully equivalent functionality,
+it is useful to add proper readline support to these platforms. This module 
+achieves this by bundling the standard Python readline module with the GNU readline 
+source code, which is compiled and statically linked to it. The end result is an
+egg which is simple to install, with no extra shared libraries required.
+
+The 2.5.1 version of this module is intended for use on Mac OS X 10.5 (Leopard),
+which ships with Python 2.5.1. It is built against GNU readline 5.2 with the latest
+patches.
+
+This module is completely unnecessary on Linux and other Unix systems with default 
+readline support. If you are using Windows, which also ships without GNU readline,
+you might want to consider using the pyreadline module instead, which is a readline 
+replacement written in pure Python that interacts with the Windows clipboard.

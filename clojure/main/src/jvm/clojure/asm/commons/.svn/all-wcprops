@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons
+END
+Method.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/Method.java
+END
+TableSwitchGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/TableSwitchGenerator.java
+END
+LocalVariablesSorter.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/LocalVariablesSorter.java
+END
+AnalyzerAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/AnalyzerAdapter.java
+END
+GeneratorAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/GeneratorAdapter.java
+END
+SerialVersionUIDAdder.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/SerialVersionUIDAdder.java
+END
+CodeSizeEvaluator.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/CodeSizeEvaluator.java
+END
+AdviceAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/AdviceAdapter.java
+END
+StaticInitMerger.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/StaticInitMerger.java
+END
+EmptyVisitor.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/EmptyVisitor.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/558/trunk/src/jvm/clojure/asm/commons/package.html
+END

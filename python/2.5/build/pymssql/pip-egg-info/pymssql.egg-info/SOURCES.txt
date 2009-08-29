@@ -1,0 +1,7 @@
+README
+mssqldbmodule.c
+pymssql.py
+pip-egg-info/pymssql.egg-info/PKG-INFO
+pip-egg-info/pymssql.egg-info/SOURCES.txt
+pip-egg-info/pymssql.egg-info/dependency_links.txt
+pip-egg-info/pymssql.egg-info/top_level.txt

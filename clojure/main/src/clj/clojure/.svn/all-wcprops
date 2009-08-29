@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/1382/trunk/src/clj/clojure
+END
+core.clj
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/1382/trunk/src/clj/clojure/core.clj
+END
+core_proxy.clj
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1366/trunk/src/clj/clojure/core_proxy.clj
+END
+version.properties
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1363/trunk/src/clj/clojure/version.properties
+END
+set.clj
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/1276/trunk/src/clj/clojure/set.clj
+END
+parallel.clj
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/1160/trunk/src/clj/clojure/parallel.clj
+END
+genclass.clj
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/1348/trunk/src/clj/clojure/genclass.clj
+END
+xml.clj
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/1160/trunk/src/clj/clojure/xml.clj
+END
+zip.clj
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/1335/trunk/src/clj/clojure/zip.clj
+END
+main.clj
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/1376/trunk/src/clj/clojure/main.clj
+END
+core_print.clj
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1311/trunk/src/clj/clojure/core_print.clj
+END
+inspector.clj
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/1160/trunk/src/clj/clojure/inspector.clj
+END

@@ -1,0 +1,377 @@
+import socket, string, types
+from pysnmp.entity import engine, config
+from pysnmp.entity.rfc3413 import cmdgen, mibvar
+from pysnmp.carrier.asynsock.dgram import udp
+from pysnmp.smi import view
+from pysnmp import error
+from pyasn1.type import univ
+
+# Auth protocol
+usmHMACMD5AuthProtocol = config.usmHMACMD5AuthProtocol
+usmHMACSHAAuthProtocol = config.usmHMACSHAAuthProtocol
+usmNoAuthProtocol = config.usmNoAuthProtocol
+
+# Privacy protocol
+usmDESPrivProtocol = config.usmDESPrivProtocol
+usmNoPrivProtocol = config.usmNoPrivProtocol
+
+class CommunityData:
+    mpModel=1 # Default is SMIv2
+    securityModel=mpModel+1
+    securityLevel='noAuthNoPriv'
+    def __init__(self, securityName, communityName, mpModel=None):
+        self.securityName = securityName
+        self.communityName = communityName
+        if mpModel is not None:
+            self.mpModel = mpModel
+            self.securityModel = mpModel + 1
+
+class UsmUserData:
+    authKey = privKey = None
+    authProtocol = usmNoAuthProtocol
+    privProtocol = usmNoPrivProtocol
+    securityLevel='noAuthNoPriv'
+    securityModel=3
+    mpModel=2
+    def __init__(self, securityName,
+                 authKey=None, privKey=None,
+                 authProtocol=None, privProtocol=None):
+        self.securityName = securityName
+        
+        if authKey is not None:
+            self.authKey = authKey
+            if authProtocol is None:
+                self.authProtocol = usmHMACMD5AuthProtocol
+            else:
+                self.authProtocol = authProtocol
+            if self.securityLevel != 'authPriv':
+                self.securityLevel = 'authNoPriv'
+
+        if privKey is not None:
+            self.privKey = privKey
+            if self.authProtocol == usmNoAuthProtocol:
+                raise error.PySnmpError('Privacy implies authenticity')
+            self.securityLevel = 'authPriv'
+            if privProtocol is None:
+                self.privProtocol = usmDESPrivProtocol
+            else:
+                self.privProtocol = privProtocol
+            
+class UdpTransportTarget:
+    transportDomain = udp.domainName
+    def __init__(self, transportAddr, timeout=None, retries=None):
+        self.transportAddr = (
+            socket.gethostbyname(transportAddr[0]), transportAddr[1]
+            )
+        self.timeout = timeout
+        self.retries = retries
+
+    def openClientMode(self):
+        self.transport = udp.UdpSocketTransport().openClientMode()
+        return self.transport
+        
+class AsynCommandGenerator:
+    _null = univ.Null('')
+    def __init__(self, snmpEngine=None):
+        if snmpEngine is None:
+            self.snmpEngine = engine.SnmpEngine()
+        else:
+            self.snmpEngine = snmpEngine
+        self.mibViewController = view.MibViewController(
+            self.snmpEngine.msgAndPduDsp.mibInstrumController.mibBuilder
+            )
+        self.__knownAuths = {}
+        self.__knownTransports = {}
+        self.__knownTransportAddrs = {}
+
+    def cfgCmdGen(self, authData, transportTarget, tagList=''):
+        paramsName = '%s-params' % (authData.securityName,)
+        if not self.__knownAuths.has_key(authData):
+            if isinstance(authData, CommunityData):
+                config.addV1System(
+                    self.snmpEngine,
+                    authData.securityName,
+                    authData.communityName
+                    )
+                config.addTargetParams(
+                    self.snmpEngine, paramsName,
+                    authData.securityName, authData.securityLevel,
+                    authData.mpModel
+                    )
+            elif isinstance(authData, UsmUserData):
+                config.addV3User(
+                    self.snmpEngine,
+                    authData.securityName,
+                    authData.authProtocol, authData.authKey,
+                    authData.privProtocol, authData.privKey
+                    )
+                config.addTargetParams(
+                    self.snmpEngine, paramsName,
+                    authData.securityName, authData.securityLevel
+                    )
+            else:
+                raise error.PySnmpError('Unsupported SNMP version')
+            self.__knownAuths[authData] = 1
+
+        if not self.__knownTransports.has_key(transportTarget.transportDomain):
+            config.addSocketTransport(
+                self.snmpEngine,
+                transportTarget.transportDomain,
+                transportTarget.openClientMode()
+                )
+            self.__knownTransports[transportTarget.transportDomain] = 1
+            
+        addrName = str(transportTarget.transportAddr)
+        if not self.__knownTransportAddrs.has_key(addrName):
+            config.addTargetAddr(
+                self.snmpEngine, addrName,
+                transportTarget.transportDomain,
+                transportTarget.transportAddr,
+                paramsName,
+                transportTarget.timeout and transportTarget.timeout * 1000 \
+                or None,
+                transportTarget.retries,
+                tagList                
+                )
+            self.__knownTransportAddrs[addrName] = 1
+            
+        return addrName, paramsName
+
+    def uncfgCmdGen(self):
+        for authData in self.__knownAuths.keys():
+            paramsName = '%s-params' % (authData.securityName,)
+            if isinstance(authData, CommunityData):
+                config.delV1System(
+                    self.snmpEngine,
+                    authData.securityName
+                    )
+                config.delTargetParams(
+                    self.snmpEngine, paramsName
+                    )
+            elif isinstance(authData, UsmUserData):
+                config.delV3User(
+                    self.snmpEngine, authData.securityName
+                    )
+                config.delTargetParams(
+                    self.snmpEngine, paramsName
+                    )
+            else:
+                raise error.PySnmpError('Unsupported SNMP version')
+        self.__knownAuths.clear()
+
+        for transportDomain in self.__knownTransports.keys():
+            config.delSocketTransport(
+                self.snmpEngine, transportDomain
+                )
+        self.__knownTransports.clear()
+
+        for addrName in self.__knownTransportAddrs.keys():
+            config.delTargetAddr(
+                self.snmpEngine, addrName
+                )
+        self.__knownTransportAddrs.clear()
+                
+    # Async SNMP apps
+    
+    def asyncGetCmd(
+        self, authData, transportTarget, varNames, (cbFun, cbCtx)
+        ):
+        addrName, paramsName = self.cfgCmdGen(
+            authData, transportTarget
+            )
+        varBinds = []
+        for varName in varNames:
+            name, oid = mibvar.mibNameToOid(
+                self.mibViewController, varName
+                )
+            varBinds.append((name + oid, self._null))
+        return cmdgen.GetCommandGenerator().sendReq(
+            self.snmpEngine, addrName, varBinds, cbFun, cbCtx
+            )
+
+    def asyncSetCmd(
+        self, authData, transportTarget, varBinds, (cbFun, cbCtx)
+        ):
+        addrName, paramsName = self.cfgCmdGen(
+            authData, transportTarget
+            )
+        __varBinds = []
+        for varName, varVal in varBinds:
+            name, oid = mibvar.mibNameToOid(
+                self.mibViewController, varName
+                )
+            __varBinds.append((name + oid, varVal))
+        return cmdgen.SetCommandGenerator().sendReq(
+            self.snmpEngine, addrName, __varBinds, cbFun, cbCtx
+            )
+        
+    def asyncNextCmd(
+        self, authData, transportTarget, varNames, (cbFun, cbCtx)
+        ):
+        addrName, paramsName = self.cfgCmdGen(
+            authData, transportTarget
+            )
+        varBinds = []
+        for varName in varNames:
+            name, oid = mibvar.mibNameToOid(
+                self.mibViewController, varName
+                )
+            varBinds.append((name + oid, self._null))
+        return cmdgen.NextCommandGenerator().sendReq(
+            self.snmpEngine, addrName, varBinds, cbFun, cbCtx
+            )
+
+    def asyncBulkCmd(
+        self, authData, transportTarget, nonRepeaters, maxRepetitions,
+        varNames, (cbFun, cbCtx)
+        ):
+        addrName, paramsName = self.cfgCmdGen(
+            authData, transportTarget
+            )
+        varBinds = []
+        for varName in varNames:
+            name, oid = mibvar.mibNameToOid(
+                self.mibViewController, varName
+                )
+            varBinds.append((name + oid, self._null))
+        return cmdgen.BulkCommandGenerator().sendReq(
+            self.snmpEngine, addrName, nonRepeaters, maxRepetitions,
+            varBinds, cbFun, cbCtx
+            )
+
+class CommandGenerator(AsynCommandGenerator):
+    def getCmd(self, authData, transportTarget, *varNames):
+        def __cbFun(
+            sendRequestHandle, errorIndication, errorStatus, errorIndex,
+            varBinds, appReturn
+            ):
+            appReturn['errorIndication'] = errorIndication
+            appReturn['errorStatus'] = errorStatus
+            appReturn['errorIndex'] = errorIndex
+            appReturn['varBinds'] = varBinds
+
+        appReturn = {}
+        self.asyncGetCmd(
+            authData, transportTarget, varNames, (__cbFun, appReturn)
+            )
+        self.snmpEngine.transportDispatcher.runDispatcher()
+        return (
+            appReturn['errorIndication'],
+            appReturn['errorStatus'],
+            appReturn['errorIndex'],
+            appReturn['varBinds']
+            )
+
+    def setCmd(self, authData, transportTarget, *varBinds):
+        def __cbFun(
+            sendRequestHandle, errorIndication, errorStatus, errorIndex,
+            varBinds, appReturn
+            ):
+            appReturn['errorIndication'] = errorIndication
+            appReturn['errorStatus'] = errorStatus
+            appReturn['errorIndex'] = errorIndex
+            appReturn['varBinds'] = varBinds
+
+        appReturn = {}
+        self.asyncSetCmd(
+            authData, transportTarget, varBinds, (__cbFun, appReturn)
+            )
+        self.snmpEngine.transportDispatcher.runDispatcher()
+        return (
+            appReturn['errorIndication'],
+            appReturn['errorStatus'],
+            appReturn['errorIndex'],
+            appReturn['varBinds']
+            )
+
+    def nextCmd(self, authData, transportTarget, *varNames):
+        def __cbFun(
+            sendRequestHandle, errorIndication, errorStatus, errorIndex,
+            varBindTable, (varBindHead, varBindTotalTable, appReturn)
+            ):
+            if errorIndication or errorStatus:
+                appReturn['errorIndication'] = errorIndication
+                appReturn['errorStatus'] = errorStatus
+                appReturn['errorIndex'] = errorIndex
+                appReturn['varBindTable'] = varBindTable
+                return
+            else:
+                varBindTableRow = varBindTable[-1]
+                for idx in range(len(varBindTableRow)):
+                    name, val = varBindTableRow[idx]
+                    # XXX extra rows
+                    if val is not None and varBindHead[idx].isPrefixOf(name):
+                        break
+                else:
+                    appReturn['errorIndication'] = errorIndication
+                    appReturn['errorStatus'] = errorStatus
+                    appReturn['errorIndex'] = errorIndex
+                    appReturn['varBindTable'] = varBindTotalTable
+                    return
+                varBindTotalTable.extend(varBindTable)
+
+            return 1 # continue table retrieval
+        
+        varBindHead = map(lambda (x,y): univ.ObjectIdentifier(x+y), map(lambda x,self=self: mibvar.mibNameToOid(self.mibViewController, x), varNames))
+
+        appReturn = {}
+        self.asyncNextCmd(
+            authData, transportTarget, varNames,
+            (__cbFun, (varBindHead,[],appReturn))
+            )
+
+        self.snmpEngine.transportDispatcher.runDispatcher()
+
+        return (
+            appReturn['errorIndication'],
+            appReturn['errorStatus'],
+            appReturn['errorIndex'],
+            appReturn['varBindTable']
+            )
+
+    def bulkCmd(self, authData, transportTarget,
+                nonRepeaters, maxRepetitions, *varNames):
+        def __cbFun(
+            sendRequestHandle, errorIndication, errorStatus, errorIndex,
+            varBindTable, (varBindHead, varBindTotalTable, appReturn)
+            ):
+            if errorIndication or errorStatus:
+                appReturn['errorIndication'] = errorIndication
+                appReturn['errorStatus'] = errorStatus
+                appReturn['errorIndex'] = errorIndex
+                appReturn['varBindTable'] = varBindTable
+                return
+            else:
+                varBindTotalTable.extend(varBindTable) # XXX out of table 
+                                                       # rows possible
+                varBindTableRow = varBindTable[-1]
+                for idx in range(len(varBindTableRow)):
+                    name, val = varBindTableRow[idx]
+                    if val is not None and varBindHead[idx].isPrefixOf(name):
+                        break
+                else:
+                    appReturn['errorIndication'] = errorIndication
+                    appReturn['errorStatus'] = errorStatus
+                    appReturn['errorIndex'] = errorIndex
+                    appReturn['varBindTable'] = varBindTotalTable
+                    return
+                
+            return 1 # continue table retrieval
+        
+        varBindHead = map(lambda (x,y): univ.ObjectIdentifier(x+y), map(lambda x,self=self: mibvar.mibNameToOid(self.mibViewController, x), varNames))
+
+        appReturn = {}
+        
+        self.asyncBulkCmd(
+            authData, transportTarget, nonRepeaters, maxRepetitions,
+            varNames, (__cbFun, (varBindHead, [], appReturn))
+            )
+
+        self.snmpEngine.transportDispatcher.runDispatcher()
+        
+        return (
+            appReturn['errorIndication'],
+            appReturn['errorStatus'],
+            appReturn['errorIndex'],
+            appReturn['varBindTable']
+            )
