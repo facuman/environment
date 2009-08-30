@@ -6,7 +6,7 @@
 ;; Sources:
 ;;   + Structure and some of the settings:
 ;;        --> http://www.elliotglaysher.org/emacs.html
-;;   + Python settings mostly from:
+;;   + Python, misc settings and multiple file layout from:
 ;;        --> http://www.enigmacurry.com/
 ;;   + Some dired tips and useful keybindings
 ;;        --> http://xahlee.org/emacs/effective_emacs.html
@@ -25,6 +25,7 @@
 ;;  Module Load paths
 ;; -----------------------------------------------------------------------
 (add-to-list 'load-path "~/environment/emacs/modes/")
+(add-to-list 'load-path "~/environment/emacs/modes/custom/")
 (add-to-list 'load-path "~/environment/emacs/modes/anything-config")
 (add-to-list 'load-path "~/environment/emacs/modes/cperl-mode")
 ;;(add-to-list 'load-path "~/environment/emacs/modes/python-mode")
@@ -38,15 +39,8 @@
 ;;(load-file "~/environment/emacs/modes/cedet/common/cedet.el") ;; load cedet
 
 
-;; -----------------------------------------------------------------------
-;; Themes
-;; -----------------------------------------------------------------------
-(add-to-list 'load-path "~/environment/emacs/themes/")
-(require 'color-theme)
-(color-theme-initialize)
-(require 'zenburn)
-(zenburn)
-(setq default-major-mode 'zenburn) ;; autoload zenburn
+;; ------------------------------------------------------------- [ themes ]
+(load-library "facuman-themes.el")
 
 
 (defun indent-or-expand (arg)
@@ -177,11 +171,10 @@ File suffix is used to determine what program to run."
                 ("\\.lua$" . lua-mode)
                 ("\\.org$" . org-mode)
                 ("\\.py$" . python-mode)
-;;                ("SCons\\(cript\\|truct\\)" . python-mode)                ("\\.gclient$" . python-mode)
                 ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode)
-                ("perl" . cperl-mode)
-                ("perl5" . cperl-mode)
-                ("miniperl" . cperl-mode)
+                ;;("perl" . cperl-mode)
+                ;; ("perl5" . cperl-mode)
+                ;; ("miniperl" . cperl-mode)
                 ) auto-mode-alist))
 
 
@@ -265,8 +258,7 @@ File suffix is used to determine what program to run."
 
 
 ;; ---------------------------------------------------------- [ dired ]
-;; alias rn to be able to edit a dired buffer as a normal text buffer
-(defalias 'rn 'wdired-change-to-wdired-mode)
+(load-library "facuman-dired.el")
 
 
 ;; ---------------------------------------------------------- [ ediff ]
@@ -274,10 +266,7 @@ File suffix is used to determine what program to run."
 
 
 ;; ---------------------------------------------------------- [ anything ]
-(require 'anything-config)
-(require 'anything-ipython)
-(require 'anything-show-completion)
-(require 'anything)
+(load-library "facuman-anything.el")
 
 
 ;; ---------------------------------------------------------- [ supercollider ]
@@ -285,29 +274,11 @@ File suffix is used to determine what program to run."
 
 
 ;; ---------------------------------------------------------- [ flymake ]
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-       (local-file (file-relative-name
-                    temp-file
-                    (file-name-directory buffer-file-name))))
-       (list "~/environment/emacs/modes/epylint.py" (list local-file))))
-
-  (add-to-list 'flymake-allowed-file-name-masks
-           '("\\.py\\'" flymake-pylint-init)))
+(load-library "facuman-flymake.el")
 
 
 ;; ---------------------------------------------------------- [ diminish ]
-;; Makes minor mode names in the modeline shorter.
-(require 'diminish)
-
-;;(eval-after-load "filladapt"
-;;  '(diminish 'filladapt-mode "Fill"))
-(eval-after-load "abbrev"
-  '(diminish 'abbrev-mode "Abv"))
-(eval-after-load "doxymacs"
-  '(diminish 'doxymacs-mode "dox"))
+(load-library "facuman-diminish.el")
 
 
 ;; ------------------------------------------------------------- [ backup-dir ]
@@ -327,14 +298,14 @@ File suffix is used to determine what program to run."
 ;;; should be default package. But now it can be downloaded
 ;;; from: http://user.it.uu.se/~mic/pager.el
 (require 'pager)
-(global-set-key "\C-v"     'pager-page-down)
-(global-set-key [next]     'pager-page-down)
-(global-set-key "\ev"      'pager-page-up)
-(global-set-key [prior]    'pager-page-up)
-(global-set-key '[M-up]    'pager-row-up)
-(global-set-key '[M-kp-8]  'pager-row-up)
-(global-set-key '[M-down]  'pager-row-down)
-(global-set-key '[M-kp-2]  'pager-row-down)
+;;(global-set-key "\C-v"     'pager-page-down)
+;;(global-set-key [next]     'pager-page-down)
+;;(global-set-key "\ev"      'pager-page-up)
+;;(global-set-key [prior]    'pager-page-up)
+;;(global-set-key '[M-up]    'pager-row-up)
+;;(global-set-key '[M-kp-8]  'pager-row-up)
+;;(global-set-key '[M-down]  'pager-row-down)
+;;(global-set-key '[M-kp-2]  'pager-row-down)
 
 
 ;; ------------------------------------------------------------- [ browse-kill-ring ]
@@ -353,13 +324,7 @@ File suffix is used to determine what program to run."
 
 
 ;; ------------------------------------------------------------- [ cperl ]
-;;; cperl-mode is preferred to perl-mode
-(defalias 'perl-mode 'cperl-mode)
-
-(eval-after-load "cperl"
-  '(progn
-     (setq cperl-hairy t)))
-
+(load-library "facuman-cperl.el")
 
 ;; ------------------------------------------------------------- [ autocomplete ]
 (require 'auto-complete)
@@ -375,99 +340,11 @@ File suffix is used to determine what program to run."
 
 
 ;; ------------------------------------------------------------- [ python ]
-(defadvice py-execute-buffer (around python-keep-focus activate)
-  "return focus to python code buffer"
-  (save-excursion ad-do-it))
-
-(require 'python)
-
-;; Initialize Pymacs
-(require 'pymacs)
-(setenv "PYMACS_PYTHON" "~/environment/python/2.5/bin/python")
-
-;; Initialize Rope
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
-(define-key ropemacs-local-keymap [(meta /)] 'dabbrev-expand)
-(define-key ropemacs-local-keymap [(control /)] 'hippie-expand)
-(define-key ropemacs-local-keymap [(control c) (control /)] 'rope-code-assist)
-
-(provide 'python-programming)
-
-;;(require 'pycomplete)
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-
-
-(setq ipython-command "~/environment/python/2.5/bin/ipython")
-(setq py-python-command "~/environment/python/2.5/bin/ipython")
-;;(setq py-python-command-args '("-pylab" "-colors" "Linux"))
-(require 'ipython)
-;;(setq py-python-command "~/environment/python/2.5/bin/ipython")
-;;(setq py-python-command-args '( "-colors" "Linux"))
+(load-library "facuman-python.el")
 
 
 ;; ----------------------------------------------------------- [ ibuffer ]
-;; *Nice* buffer switching
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
-(setq ibuffer-show-empty-filter-groups nil)
-(setq ibuffer-saved-filter-groups
-      '(("default"
-         ("version control" (or (mode . svn-status-mode)
-                    (mode . svn-log-edit-mode)
-                    (name . "^\\*svn-")
-                    (name . "^\\*vc\\*$")
-                    (name . "^\\*Annotate")
-                    (name . "^\\*git-")
-                    (name . "^\\*vc-")))
-         ("emacs" (or (name . "^\\*scratch\\*$")
-                      (name . "^\\*Messages\\*$")
-                      (name . "^TAGS\\(<[0-9]+>\\)?$")
-                      (name . "^\\*Help\\*$")
-					  (name . "^\\*info\\*$")
-					  (name . "^\\*Occur\\*$")
-                      (name . "^\\*grep\\*$")
-                      (name . "^\\*Compile-Log\\*$")
-                      (name . "^\\*Backtrace\\*$")
-					  (name . "^\\*Process List\\*$")
-					  (name . "^\\*gud\\*$")
-					  (name . "^\\*Man")
-					  (name . "^\\*WoMan")
-                      (name . "^\\*Kill Ring\\*$")
-                      (name . "^\\*Completions\\*$")
-                      (name . "^\\*tramp")
-                      (name . "^\\*shell\\*$")
-                      (name . "^\\*compilation\\*$")))
-         ("emacs source" (or (mode . emacs-lisp-mode)
-							 (filename . "/Applications/Emacs.app")
-                             (filename . "/bin/emacs")))
-         ("agenda" (or (name . "^\\*Calendar\\*$")
-                       (name . "^diary$")
-                       (name . "^\\*Agenda")
-                       (name . "^\\*org-")
-                       (name . "^\\*Org")
-                       (mode . org-mode)
-                       (mode . muse-mode)))
-         ("latex" (or (mode . latex-mode)
-                      (mode . LaTeX-mode)
-                      (mode . bibtex-mode)
-                      (mode . reftex-mode)))
-         ("dired" (or (mode . dired-mode))))))
-
-
-
-(add-hook 'ibuffer-mode-hook
-          (lambda ()
-            (ibuffer-switch-to-saved-filter-groups "default")))
-
-;; Order the groups so the order is : [Default], [agenda], [emacs]
-(defadvice ibuffer-generate-filter-groups (after reverse-ibuffer-groups ()
-                                                 activate)
-  (setq ad-return-value (nreverse ad-return-value)))
+(load-library "facuman-ibuffer.el")
 
 
 ;; ------------------------------------------------------------- [ tempo ]
@@ -478,11 +355,7 @@ File suffix is used to determine what program to run."
 
 
 ;; ------------------------------------------------------------- [ cedet ]
-;; require the main cedet mode
-(require 'cedet)
-(global-ede-mode t)
-(require 'semantic-ia)
-
+(load-library "facuman-cedet.el")
 
 ;; ------------------------------------------------------------- [ ecb ]
 (require 'ecb)
@@ -612,135 +485,12 @@ type of version control found in that directory"
            (cvs-status targetDir)))))
 
 
-;; ------------------------------------------------------ [ CPerl Startup ]
-(defun my-cperl-startup ()
-  "Setup cperl."
-  (interactive)
-  (local-set-key '[pause] 'perldb)
-  (setq gud-perldb-command-name "~/environment/binaries/ActivePerl-5.8/bin/perl -w ") ; For warnings
-  (setq tab-width 8)
-  (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
-  ;(setq perl-indent-level 4)
-  ;(setq perl-tab-always-indent nil) ; Indent if at left margin, else tab
-  ;(setq perl-continued-statement-offset 2)
-  ;(setq perl-continued-brace-offset -2)
-
-  (linum-mode)
-
-  (setq
-   cperl-close-paren-offset -4
-   cperl-continued-statement-offset 4
-   cperl-indent-level 4
-   cperl-indent-parens-as-block t
-   cperl-tabs-always-indent t)
-
-  ;; enable completiton
-  (setq plcmp-use-keymap nil) ; disable key completiton keybindings
-  (require 'perl-completion)
-  (perl-completion-mode t)
-
-  (when (require 'auto-complete nil t) ; no error whatever auto-complete.el is not installed.
-    (auto-complete-mode t)
-    (make-variable-buffer-local 'ac-sources)
-    (setq ac-sources
-          '(ac-source-perl-completion))))
-  ;;(my-start-scripting-mode "pl" "#!/usr/bin/perl"))
-
-(add-hook 'cperl-mode-hook 'my-cperl-startup)
-
-
-;; ---------------------------------------------------- [ Python startup ]
-(defun my-python-startup ()
-  "Setup Python style."
-  (interactive)
-  (local-set-key '[f4] 'pdb)
-  (setq tab-width 4)
-  ;;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)
-  (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
-  (setq python-indent 4)
-  (setq python-continuation-offset 2)
-  ;;(eldoc-mode 1)
-
-  ;; remove trailing whitespace
-  (setq show-trailing-whitespace t)
-
-  ;; python mode combined with outline minor mode:
-  (outline-minor-mode 1)
-  (setq outline-regexp "def\\|class ")
-  (setq coding-system-for-write 'utf-8)
-  (local-set-key "\C-c\C-a" 'show-all)
-  (local-set-key "\C-c\C-t" 'hide-body)
-  (local-set-key "\C-c\C-s" 'outline-toggle-children)
-
-  ;; which function am I editing?
-  (when (>= emacs-major-version 23)
-    (which-function-mode t))
-
-  ;; autocomplete in python
-  (auto-complete-mode)
-;;  (auto-complete-mode 1)
-
-  ;;(add-to-list 'ac-omni-completion-sources
-  ;;  (cons "\\." '(ac-source-semantic)))
-  ;;(add-to-list 'ac-omni-completion-sources
-  ;;  (cons "->" '(ac-source-semantic)))
-  (setq ac-sources '(ac-source-semantic
-                     ac-source-words-in-buffer
-                     ac-source-ropemacs))
-;;                     ac-source-yasnippet))
-
-
-  (setq py-smart-indentation nil))
-  ;;(my-start-scripting-mode "py" "#!/usr/bin/python"))
-
-(add-hook 'python-mode-hook 'my-python-startup)
-
-
-;; ---------------------------------------------------- [ dired startup ]
-(defun my-dired-startup ()
-  ;; Enable the dired-find-alternate-file command
-  (put 'dired-find-alternate-file 'disabled nil)
-
-  ;; Allow 'Enter' and '^' to use the same buffer
-  (define-key dired-mode-map (kbd "<return>")
-    'dired-find-alternate-file) ; was dired-advertised-find-file
-  (define-key dired-mode-map (kbd "^")
-    (lambda () (interactive) (find-alternate-file ".."))))
-  ; was dired-up-directory
-
-(add-hook 'dired-mode-hook 'my-dired-startup)
-
-
-;; ---------------------------------------------------- [ IPython startup ]
-(defun my-ipython-startup ()
-  "Setup IPython shell hook."
-  ;;
-(interactive)
-
-  ;; comint mode:
-  (require 'comint)
-  (define-key comint-mode-map [(control p)]
-    'comint-previous-matching-input-from-input)
-  (define-key comint-mode-map [(control n)]
-    'comint-next-matching-input-from-input)
-  (define-key comint-mode-map [(control meta n)]
-    'comint-next-input)
-  (define-key comint-mode-map [(control meta p)]
-    'comint-previous-input)
-  (local-unset-key (kbd "<tab>"))
-  (local-set-key (kbd "s") 'other-window))
-
-  ;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
-
-(add-hook 'ipython-shell-hook 'my-ipython-startup)
+;; ------------------------------------------------------ [ cperl ]
+(load-library "facuman-cperl.el")
 
 
 ;; ---------------------------------------------------- [ Tidy startup ]
-(defun my-tidy-startup ()
-  "Tidy temp."
-  '(tidy-temp-directory "~/.tidy/temp"))
-
-(add-hook 'tidy-mode-hook 'my-tidy-startup)
+(load-library "facuman-tidy.el")
 
 
 ;; ---------------------------------------------------- [ Ecb startup ]
@@ -860,7 +610,6 @@ type of version control found in that directory"
                'try-complete-lisp-symbol)
   (add-to-list 'hippie-expand-try-functions-list
                'try-complete-lisp-symbol-partially)
-
   ;; Define lisp key macros
   (local-set-key "\C-css" 'insert-elisp-seperator-line)
   (local-set-key "\C-csh" 'insert-elisp-section-header)
