@@ -1,4 +1,6 @@
 ;; ------------------------------------------------------ [ CPerl Startup ]
+(add-to-list 'load-path "~/environment/emacs/modes/cperl-mode")
+
 ;;; cperl-mode is preferred to perl-mode
 (defalias 'perl-mode 'cperl-mode)
 

@@ -1,4 +1,9 @@
 ;; ---------------------------------------------------------- [ flymake ]
+;; When turning on flyspell-mode, automatically check the entire buffer.
+;; Why this isn't the default baffles me.
+(defadvice flyspell-mode (after advice-flyspell-check-buffer-on-start activate)
+  (flyspell-buffer))
+
 (when (load "flymake" t)
   (defun flymake-pylint-init ()
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
