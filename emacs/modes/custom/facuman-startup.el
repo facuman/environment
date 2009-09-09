@@ -60,7 +60,7 @@
 (load-file "~/environment/emacs/modes/ergonomic_keybinding_qwerty.el")
 
 ;; bind goto line to M-x g
-(global-set-key "\M-g" 'goto-line)
+;;(global-set-key "\M-g" 'goto-line)
 
 ;; open keyboard shortcut image with F8 key
 (global-set-key (kbd "<f8>")

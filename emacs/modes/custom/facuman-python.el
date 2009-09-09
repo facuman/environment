@@ -25,6 +25,16 @@
 (autoload 'pymacs-exec "pymacs" nil t)
 (autoload 'pymacs-load "pymacs" nil t)
 
+
+(defadvice py-execute-buffer (around python-keep-focus activate)
+  "Thie advice to make focus python source code after execute command `py-execute-buffer'."
+  (let ((remember-window (selected-window))
+        (remember-point (point)))
+    ad-do-it
+    (select-window remember-window)
+    (goto-char remember-point)))
+
+
 (defun my-python-startup ()
   "Setup Python style."
   (interactive)
