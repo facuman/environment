@@ -90,20 +90,20 @@
 
 (defun my-ipython-startup ()
   "Setup IPython shell hook."
-  ;;(interactive)
+  (interactive))
 
   ;; comint mode:
-  (require 'comint)
-  (define-key comint-mode-map [(control p)]
-    'comint-previous-matching-input-from-input)
-  (define-key comint-mode-map [(control n)]
-    'comint-next-matching-input-from-input)
-  (define-key comint-mode-map [(control meta n)]
-    'comint-next-input)
-  (define-key comint-mode-map [(control meta p)]
-    'comint-previous-input)
-  (local-unset-key (kbd "<tab>"))
-  (local-set-key (kbd "s") 'other-window))
+  ;;(require 'comint))
+  ;; (define-key comint-mode-map [(control p)]
+  ;;   'comint-previous-matching-input-from-input)
+  ;; (define-key comint-mode-map [(control n)]
+  ;;   'comint-next-matching-input-from-input)
+  ;; (define-key comint-mode-map [(control meta n)]
+  ;;   'comint-next-input)
+  ;; (define-key comint-mode-map [(control meta p)]
+  ;;   'comint-previous-input)
+  ;; (local-unset-key (kbd "<tab>"))
+  ;; (local-set-key (kbd "s") 'other-window))
 
   ;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
 

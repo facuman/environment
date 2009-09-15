@@ -1,7 +1,24 @@
 ;; ------------------------------------------------------ [ ecb ]
 (add-to-list 'load-path "~/environment/emacs/modes/ecb")
+(add-to-list 'load-path "~/environment/emacs/modes/cedet/eieio")
+(add-to-list 'load-path "~/environment/emacs/modes/cedet/semantic")
+(add-to-list 'load-path "~/environment/emacs/modes/cedet/speedbar")
 
 (require 'ecb)
+
+;; Deactivate tip of the day
+(setq ecb-tip-of-the-day nil)
+
+
+;; Open files with a mouse click
+(setq ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
+
+;; (ecb-activate)
+
+;; Activate Semantic
+(setq semantic-load-turn-everything-on t)
+(require 'semantic-load)
+
 
 (defun my-ecb-startup ()
   "Ecb startup."

@@ -36,10 +36,12 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(ecb-layout-name "left14")
+ '(ecb-layout-window-sizes (quote (("test" (ecb-symboldef-buffer-name 0.18471337579617833 . 0.4888888888888889) (ecb-methods-buffer-name 0.18471337579617833 . 0.4888888888888889)))))
  '(ecb-options-version "2.40")
  '(ecb-tip-of-the-day nil)
  '(ecb-windows-width 0.25)
- '(only-global-abbrevs t))
+ '(only-global-abbrevs t)
+ '(regex-tool-backend (quote perl)))
 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
@@ -58,7 +60,7 @@
   "Return a regexp to match a string item in STRINGS." t)
 (autoload 'make-regexps "make-regexp"  "Return a regexp to REGEXPS." t)
 (autoload 'svn-status "psvn" "Psvn.el status mode." t)
-
+(autoload 'vc-git "vc-git" "Autoload vc git handling." t)
 
 ;; -----------------------------------------------------------------------
 ;; auto-mode-alist
@@ -115,8 +117,7 @@
 
 
 ;; ------------------------------------------------------------- [ ido-mode ]
-(require 'ido)
-(ido-mode t)
+(load-library "facuman-ido.el")
 
 
 ;; ------------------------------------------------------------- [ cua ]
@@ -134,6 +135,8 @@
 ;; ------------------------------------------------------------- [ anything ]
 (load-library "facuman-anything.el")
 
+;; ------------------------------------------------------------- [ regex ]
+;;(load-library "facuman-regex.el")
 
 ;; ------------------------------------------------------------- [ supercollider ]
 (require 'sclang)
@@ -160,12 +163,6 @@
 ;;(global-set-key '[M-kp-8]  'pager-row-up)
 ;;(global-set-key '[M-down]  'pager-row-down)
 ;;(global-set-key '[M-kp-2]  'pager-row-down)
-
-
-;; ------------------------------------------------------------- [ shell ]
-(eval-after-load "shell"
-  '(progn
-     (ansi-color-for-comint-mode-on)))
 
 
 ;; ------------------------------------------------------------- [ cperl ]
@@ -201,10 +198,10 @@
 
 
 ;; ------------------------------------------------------------- [ tempo ]
-(defun tempo-space ()
-  (interactive "*")
-  (or (tempo-expand-if-complete)
-	  (insert " ")))
+;;(defun tempo-space ()
+;;  (interactive "*")
+  ;; (or (tempo-expand-if-complete)
+  ;;     (insert " ")))
 
 
 ;; ------------------------------------------------------------- [ saveplace ]
@@ -243,6 +240,17 @@
 ;; ------------------------------------------------------------- [ functions ]
 (load-library "facuman-functions.el")
 
+
 ;; ------------------------------------------------------------- [ elpa ]
 (load-library "facuman-elpa.el")
+
+
+;; ------------------------------------------------------------- [ org ]
+(load-library "facuman-org.el")
+
+
+;; ------------------------------------------------------------- [ shell ]
+(eval-after-load "shell"
+  '(progn
+     (ansi-color-for-comint-mode-on)))
 

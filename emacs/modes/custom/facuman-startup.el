@@ -20,13 +20,13 @@
 ;; set font
 ;; (set-default-font "Bitstream Vera Sans Mono-10")
 (set-default-font "Bitstream Vera Sans Mono-10")
-(set-fontset-font (frame-parameter nil 'font)
-	'han '("cwTeXHeiBold" . "unicode-bmp"))
+;;(set-fontset-font (frame-parameter nil 'font)
+;;	'han '("cwTeXHeiBold" . "unicode-bmp"))
 
 ;; disable toolbars
-(menu-bar-mode nil)
-(tool-bar-mode nil)
-(scroll-bar-mode nil)
+;; (menu-bar-mode nil)
+;; (tool-bar-mode nil)
+;; (scroll-bar-mode nil)
 
 ;; display time in status bar:
 (setq display-time-24hr-format t)
@@ -57,7 +57,7 @@
 (global-set-key [f13] 'execute-extended-command)
 
 ;; use ergonomic key shortcuts
-(load-file "~/environment/emacs/modes/ergonomic_keybinding_qwerty.el")
+(load-file "~/environment/emacs/modes/ergonomic_keybinding_qwerty_4.3.13.el")
 
 ;; bind goto line to M-x g
 ;;(global-set-key "\M-g" 'goto-line)
@@ -72,12 +72,21 @@
 ;; Changes the location where backup files are placed. Instead of
 ;; being spread out all over the filesystem, they're now placed in one
 ;; location.
-(if (file-accessible-directory-p (expand-file-name "~/.Trash"))
-    (add-to-list 'backup-directory-alist
-                 (cons "." (expand-file-name "~/.Trash/emacs-backups/")))
-    (add-to-list 'auto-save-file-name-transforms
-                 (cons "." (expand-file-name "~/.Trash/emacs-autosaves/"))))
+;;(if (file-accessible-directory-p (expand-file-name "~/.Trash"))
+;;    (add-to-list 'backup-directory-alist
+;;                 (cons "." (expand-file-name "~/.Trash/emacs-backups/"))))
 
+;;(if (file-accessible-directory-p (expand-file-name "~/.Trash"))
+;;    (add-to-list 'auto-save-file-name-transforms
+;;                 (cons "." (expand-file-name "~/.Trash/emacs-autosaves/"))))
+
+(setq temporary-backup-directory "~/.Trash/emacs-backups")
+(setq backup-directory-alist
+	`((".*" . ,temporary-backup-directory)))
+
+(setq temporary-autosave-directory "~/.Trash/emacs-autosaves")
+(setq auto-save-file-name-transforms
+        `((".*" ,temporary-autosave-directory t)))
 
 ;; ------------------------------------------------------------- [ browse-kill-ring ]
 ;; Select something that you put in the kill ring ages ago.

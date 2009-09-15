@@ -33,7 +33,8 @@
 ;; Thanks to Nikolaj Schumacher for his implementation of extend-selection.
 ;; Thanks to Andreas Politz and Nikolaj Schumacher for correcting/improving implementation of toggle-letter-case.
 ;; Thanks to Lennart Borgman for several suggestions on code to prevent shortcuts involving shift key to start select text when CUA-mode is on.
-;; Thanks to marciomazza for spotting several default bindings that should have been be unbound.
+;; Thanks to David Capello for contribution to shrink-whitespaces.
+;; Thanks to marciomazza for spotting several default bindings that should have been unbound.
 ;; Thanks to those who have created and improved the version for Colemak layout. They are (by date): “vockets”, “postivan”, Graham Poulter.
 ;; Thanks to lwarxx for bug report on diff-mode
 ;; Thanks to many users who send in comments and appreciations on this.
@@ -44,6 +45,16 @@
 ;-*- coding: utf-8 -*-
 
 ;; Note: When the context is about keys on the keyboard hardware, then QWERTY is used to indicate the key. For example, “Changed M+y to something”, that “y” means the key that is under the key 7. (which is Dvorak's “f”).
+
+;; version 4.3.13, 2009-08-28 • improved shrink-whitespaces. Now, when called twice, it removes the remaining single space. Thanks to David Capello for the code.
+
+;; version 4.3.12.2, 2009-08-15 • Fixed a bug where delete-selection-mode migth be turned off. Changed “(delete-selection-mode t)” to “(delete-selection-mode 1)”.
+
+;; version 4.3.12.1, 2009-08-14 • A minor implementation improvement. In one place, changed the use of functionp to fboundp for checking the existing of a emacs 23 feature recenter-top-bottom. Was using functionp because i forgot about fboundp.
+
+;; version 4.3.12, 2009-08-13 • Alt+p is now “recenter-top-bottom” for emacs 23 users. In emacs 22, it is “recenter”.
+
+;; version 4.3.11, 2009-08-05 • Added a hook to fix message-mode.
 
 ;; version 4.3.10, 2009-06-14 • fixed a previous/next reversal for f11/f12 keys in rcirc-mode-hook. • diff-mode uses some bindings in M-‹key› space. Fixed by adding a diff-mode-hook. (thanks to lwarxx)
 
@@ -273,8 +284,11 @@
 (global-set-key (kbd "M-;") 'isearch-forward)
 (global-set-key (kbd "M-:") 'isearch-backward)
 
-(global-set-key (kbd "M-p") 'recenter)
-
+(global-set-key (kbd "M-p")
+                (if (fboundp 'recenter-top-bottom)
+                    'recenter-top-bottom
+                  'recenter
+                  ))
 
 ;;; MAJOR EDITING COMMANDS
 
@@ -310,7 +324,7 @@
 (global-set-key (kbd "M-/") 'toggle-letter-case)
 
 ; keyword completion, because Alt+Tab is used by OS
-(global-set-key (kbd "M-t") 'call-keyword-completion)
+(global-set-key (kbd "M-t") 'call-keyword-completion) 
 
 ; Hard-wrap/un-hard-wrap paragraph
 (global-set-key (kbd "M-q") 'compact-uncompact-block)
@@ -537,6 +551,13 @@
   (define-key awk-mode-map (kbd "M-e") 'backward-kill-word) ; was c-end-of-statement
  ))
 
+(add-hook 'message-mode-hook
+; M-; comment-region
+; M-n message-display-abbrev
+ (lambda ()
+ (define-key message-mode-map (kbd "M-;") 'isearch-repeat-forward)
+ ))
+
 ;; nothing to fix: c-mode, c++-mode, java, sh, js, perl, php, python
 
 ;;; --------------------------------------------------
@@ -546,7 +567,7 @@
 
 (require 'redo "redo.elc" t) ; for redo shortcut
 
-(delete-selection-mode t) ; turn on text selection highlighting and make typing override selected text (Note: when delete-selection-mode is on, then transient-mark-mode is automatically on too.)
+(delete-selection-mode 1) ; turn on text selection highlighting and make typing override selected text (Note: when delete-selection-mode is on, then transient-mark-mode is automatically on too.)
 
 (defun call-keyword-completion ()
   "Call the command that has keyboard shortcut M-TAB."
@@ -710,11 +731,13 @@ EOL chars by space when the EOL char is not inside string.
       (put this-command 'stateIsCompact-p (if currentStateIsCompact
                                               nil t)) ) ) )
 
-
 (defun shrink-whitespaces ()
   "Remove white spaces around cursor to just one or none.
+If current line does not contain non-white space chars, then remove blank lines to just one.
 If current line contains non-white space chars, then shrink any whitespace char surrounding cursor to just one space.
-If current line does not contain non-white space chars, then remove blank lines to just one."
+If current line is a single space, remove that space.
+
+Calling this command 3 times will always result in no whitespaces around cursor."
   (interactive)
   (let (
         cursor-point
@@ -748,17 +771,19 @@ If current line does not contain non-white space chars, then remove blank lines 
       (setq whitespace-end (point))
       )
 
-
     (if line-has-meat-p
-        (progn 
+        (let (deleted-text)
           (when spaceTabNeighbor-p
-            (delete-region space-or-tab-begin space-or-tab-end)
-            (insert " "))
-          )
+            ;; remove all whitespaces in the range
+            (setq deleted-text (delete-and-extract-region space-or-tab-begin space-or-tab-end))
+            ;; insert a whitespace only if we have removed something
+            ;; different that a simple whitespace
+            (if (not (string= deleted-text " "))
+                (insert " ") ) ) )
 
       (progn
-;;         (delete-region whitespace-begin whitespace-end)
-;;         (insert "\n")
+        ;; (delete-region whitespace-begin whitespace-end)
+        ;; (insert "\n")
         (delete-blank-lines)
         )
       ;; todo: possibly code my own delete-blank-lines here for better efficiency, because delete-blank-lines seems complex.
@@ -818,8 +843,8 @@ in that cyclic order."
 ;;; BUFFER RELATED
 
 (defun next-user-buffer ()
-  "Switch to the next user buffer in cyclic order.\n
-User buffers are those not starting with *."
+  "Switch to the next user buffer.
+User buffers are those whose name does not start with *."
   (interactive)
   (next-buffer)
   (let ((i 0))
@@ -827,8 +852,8 @@ User buffers are those not starting with *."
       (setq i (1+ i)) (next-buffer) )))
 
 (defun previous-user-buffer ()
-  "Switch to the previous user buffer in cyclic order.\n
-User buffers are those not starting with *."
+  "Switch to the previous user buffer.
+User buffers are those whose name does not start with *."
   (interactive)
   (previous-buffer)
   (let ((i 0))
@@ -836,8 +861,8 @@ User buffers are those not starting with *."
       (setq i (1+ i)) (previous-buffer) )))
 
 (defun next-emacs-buffer ()
-  "Switch to the next emacs buffer in cyclic order.\n
-Emacs buffers are those starting with *."
+  "Switch to the next emacs buffer.
+Emacs buffers are those whose name starts with *."
   (interactive)
   (next-buffer)
   (let ((i 0))
@@ -845,8 +870,8 @@ Emacs buffers are those starting with *."
       (setq i (1+ i)) (next-buffer) )))
 
 (defun previous-emacs-buffer ()
-  "Switch to the previous emacs buffer in cyclic order.\n
-Emacs buffers are those starting with *."
+  "Switch to the previous emacs buffer.
+Emacs buffers are those whose name starts with *."
   (interactive)
   (previous-buffer)
   (let ((i 0))

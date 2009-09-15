@@ -76,8 +76,8 @@
 (run-shell-command (concatenate 'string "xset -b"))
 
 ;; Top keys
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec amixer set Master 3- unmute")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec amixer set Master 3+ unmute")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec schedtool -N -n 19 -e amixer set Master 3- unmute")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec schedtool -N -n 19 -e amixer set Master 3+ unmute")
 (define-key *top-map* (kbd "XF86AudioMute") "exec amixer set 'Master' toggle")
 
 (define-key *root-map* (kbd "C-p") "exec xpdf")
