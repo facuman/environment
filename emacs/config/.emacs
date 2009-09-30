@@ -61,6 +61,7 @@
 (autoload 'make-regexps "make-regexp"  "Return a regexp to REGEXPS." t)
 (autoload 'svn-status "psvn" "Psvn.el status mode." t)
 (autoload 'vc-git "vc-git" "Autoload vc git handling." t)
+(autoload 'magit-status "magit-status" "Autoload magit-status." t)
 
 ;; -----------------------------------------------------------------------
 ;; auto-mode-alist
@@ -139,7 +140,7 @@
 ;;(load-library "facuman-regex.el")
 
 ;; ------------------------------------------------------------- [ supercollider ]
-(require 'sclang)
+;;(require 'sclang)
 
 
 ;; ------------------------------------------------------------- [ flymake ]
@@ -154,7 +155,7 @@
 ;;; Excellent package for better scrolling in emacs
 ;;; should be default package. But now it can be downloaded
 ;;; from: http://user.it.uu.se/~mic/pager.el
-(require 'pager)
+;;(require 'pager)
 ;;(global-set-key "\C-v"     'pager-page-down)
 ;;(global-set-key [next]     'pager-page-down)
 ;;(global-set-key "\ev"      'pager-page-up)
