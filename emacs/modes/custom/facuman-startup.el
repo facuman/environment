@@ -24,8 +24,8 @@
 ;;	'han '("cwTeXHeiBold" . "unicode-bmp"))
 
 ;; disable toolbars
-;; (menu-bar-mode nil)
-;; (tool-bar-mode nil)
+(menu-bar-mode nil)
+(tool-bar-mode nil)
 ;; (scroll-bar-mode nil)
 
 ;; display time in status bar:

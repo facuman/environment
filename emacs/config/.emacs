@@ -214,8 +214,8 @@
 
 ;; ------------------------------------------------------------- [ desktop ]
 ;; let's try the desktop feature
-(desktop-load-default)
-(desktop-read)
+;; (desktop-load-default)
+;; (desktop-read)
 
 
 ;; ------------------------------------------------------------- [ autocomplete ]

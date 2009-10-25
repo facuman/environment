@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The requirements file format &mdash; pip v0.5.1 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.5.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pip v0.5.1 documentation" href="index.html" />
+    <link rel="prev" title="News for pip" href="news.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="news.html" title="News for pip"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pip v0.5.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-requirements-file-format">
+<h1>The requirements file format<a class="headerlink" href="#the-requirements-file-format" title="Permalink to this headline">¶</a></h1>
+<p>The requirements file is what pip uses to install packages.
+This document describes that format.</p>
+<p>Each line of the requirements file indicates something to be
+installed.  For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">MyPackage</span><span class="o">==</span><span class="mf">3.0</span>
+</pre></div>
+</div>
+<p>tells pip to install the 3.0 version of MyPackage.</p>
+<p>You can also install a package in an &#8220;editable&#8221; form.  This puts the
+source code into <tt class="docutils literal"><span class="pre">src/distname</span></tt> (making the name lower case) and
+runs <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></tt> on the package.  To indicate
+editable, use <tt class="docutils literal"><span class="pre">-e</span></tt>, like:</p>
+<div class="highlight-python"><pre>-e svn+http://svn.myproject.org/svn/MyProject/trunk#egg=MyProject</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">#egg=MyProject</span></tt> part is important, because while you can
+install simply given the svn location, the project name is useful in
+other places.</p>
+<p>If you need to give pip (and by association easy_install) hints
+about where to find a package, you can use the <tt class="docutils literal"><span class="pre">-f</span></tt>
+(<tt class="docutils literal"><span class="pre">--find-links</span></tt>) option, like:</p>
+<div class="highlight-python"><pre>-f http://someserver.org/MyPackage-3.0.tar.gz</pre>
+</div>
+<p>If the package is named like <tt class="docutils literal"><span class="pre">PackageName-Version.tar.gz</span></tt> (or a zip)
+then you don&#8217;t need <tt class="docutils literal"><span class="pre">#egg=...</span></tt>.  Note that you cannot provide
+multiple <tt class="docutils literal"><span class="pre">-f</span></tt> arguments to easy_install, but you can in a
+requirements file (they all get concatenated into a single <tt class="docutils literal"><span class="pre">-f</span></tt> for
+easy_install).</p>
+<div class="section" id="version-control">
+<h2>Version Control<a class="headerlink" href="#version-control" title="Permalink to this headline">¶</a></h2>
+<p>Right now pip knows of the following major version control systems:</p>
+<div class="section" id="subversion">
+<h3>Subversion<a class="headerlink" href="#subversion" title="Permalink to this headline">¶</a></h3>
+<p>Pip supports the URL schemes <tt class="docutils literal"><span class="pre">svn</span></tt>, <tt class="docutils literal"><span class="pre">svn+http</span></tt>, <tt class="docutils literal"><span class="pre">svn+https</span></tt>
+You can also give specific revisions to an SVN URL, like:</p>
+<div class="highlight-python"><pre>-e svn+http://svn.myproject.org/svn/MyProject/trunk@2019#egg=MyProject</pre>
+</div>
+<p>which will check out revision 2019.  <tt class="docutils literal"><span class="pre">&#64;{20080101}</span></tt> would also check
+out the revision from 2008-01-01. You can only check out specific
+revisions using <tt class="docutils literal"><span class="pre">-e</span> <span class="pre">svn+...</span></tt>.</p>
+</div>
+<div class="section" id="git">
+<h3>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h3>
+<p>Pip currently supports cloning over <tt class="docutils literal"><span class="pre">git</span></tt>, <tt class="docutils literal"><span class="pre">git+http</span></tt> and <tt class="docutils literal"><span class="pre">git+ssh</span></tt>:</p>
+<div class="highlight-python"><pre>-e git://git.myproject.org/MyProject.git#egg=MyProject
+-e git+http://git.myproject.org/MyProject/#egg=MyProject
+-e git+ssh://git@myproject.org/MyProject/#egg=MyProject</pre>
+</div>
+<p>Passing branch names, a commit hash or a tag name is also possible:</p>
+<div class="highlight-python"><pre>-e git://git.myproject.org/MyProject.git@master#egg=MyProject
+-e git://git.myproject.org/MyProject.git@v1.0#egg=MyProject
+-e git://git.myproject.org/MyProject.git@da39a3ee5e6b4b0d3255bfef95601890afd80709#egg=MyProject</pre>
+</div>
+</div>
+<div class="section" id="mercurial">
+<h3>Mercurial<a class="headerlink" href="#mercurial" title="Permalink to this headline">¶</a></h3>
+<p>The supported schemes are: <tt class="docutils literal"><span class="pre">hg+http</span></tt> and <tt class="docutils literal"><span class="pre">hg+ssh</span></tt>:</p>
+<div class="highlight-python"><pre>-e hg+http://hg.myproject.org/MyProject/#egg=MyProject
+-e hg+ssh://hg@myproject.org/MyProject/#egg=MyProject</pre>
+</div>
+<p>You can also specify a revision number, a revision hash, a tag name or a local
+branch name:</p>
+<div class="highlight-python"><pre>-e hg+http://hg.myproject.org/MyProject/@da39a3ee5e6b#egg=MyProject
+-e hg+http://hg.myproject.org/MyProject/@2019#egg=MyProject
+-e hg+http://hg.myproject.org/MyProject/@v1.0#egg=MyProject
+-e hg+http://hg.myproject.org/MyProject/@special_feature#egg=MyProject</pre>
+</div>
+</div>
+<div class="section" id="bazaar">
+<h3>Bazaar<a class="headerlink" href="#bazaar" title="Permalink to this headline">¶</a></h3>
+<p>Pip supports Bazaar using the <tt class="docutils literal"><span class="pre">bzr+http</span></tt>, <tt class="docutils literal"><span class="pre">bzr+https</span></tt>, <tt class="docutils literal"><span class="pre">bzr+ssh</span></tt> and
+<tt class="docutils literal"><span class="pre">bzr+sftp</span></tt> schemes:</p>
+<div class="highlight-python"><pre>-e bzr+http://bzr.myproject.org/MyProject/trunk/#egg=MyProject
+-e bzr+sftp://user@myproject.org/MyProject/trunk/#egg=MyProject
+-e bzr+ssh://user@myproject.org/MyProject/trunk/#egg=MyProject</pre>
+</div>
+<p>Tags or revisions can be installed like this:</p>
+<div class="highlight-python"><pre>-e bzr+https://bzr.myproject.org/MyProject/trunk/@2019#egg=MyProject
+-e bzr+http://bzr.myproject.org/MyProject/trunk/@v1.0#egg=MyProject</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">The requirements file format</a><ul>
+<li><a class="reference external" href="#version-control">Version Control</a><ul>
+<li><a class="reference external" href="#subversion">Subversion</a></li>
+<li><a class="reference external" href="#git">Git</a></li>
+<li><a class="reference external" href="#mercurial">Mercurial</a></li>
+<li><a class="reference external" href="#bazaar">Bazaar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="news.html"
+                                  title="previous chapter">News for pip</a></p>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="news.html" title="News for pip"
+             >previous</a> |</li>
+        <li><a href="index.html">pip v0.5.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, The Open Planning Project.
+      Last updated on Oct 08, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>

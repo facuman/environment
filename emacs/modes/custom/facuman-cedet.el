@@ -3,7 +3,10 @@
 
 ;; require the main cedet mode
 (require 'cedet)
-(global-ede-mode t)
+
+(require 'ede)
+(setq global-ede-mode t)
+
 (require 'semantic-ia)
 
 ;;make all the 'semantic.cache' files go somewhere sane

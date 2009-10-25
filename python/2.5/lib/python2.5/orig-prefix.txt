@@ -1,1 +1,1 @@
-/home/fdeguzman/environment/binaries/ActivePython-2.5.4.4-linux-x86_64
+/home/fdeguzman/environment/binaries/ActivePython-2.5
