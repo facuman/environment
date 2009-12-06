@@ -186,6 +186,10 @@
 (load-library "facuman-tidy.el")
 
 
+;; ------------------------------------------------------------ [ haskell ]
+(load-library "facuman-haskell.el")
+
+
 ;; ------------------------------------------------------------- [ cedet ]
 (load-library "facuman-cedet.el")
 
@@ -193,6 +197,11 @@
 ;; ------------------------------------------------------------- [ ecb ]
 (load-library "facuman-ecb.el")
 
+
+;; ------------------------------------------------------------- [ ede ]
+(require 'ede)
+;;(setq global-ede-mode t)
+(global-ede-mode 1)
 
 ;; ------------------------------------------------------------- [ eshell ]
 (load-library "facuman-eshell.el")
