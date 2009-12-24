@@ -1,3 +1,0 @@
-#!/home/fdeguzman/environment/python/2.6/bin/python
-from pylint.checkers import similar
-similar.run()

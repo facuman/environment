@@ -1,1 +1,0 @@
-/home/fdeguzman/environment/binaries/ActivePython-2.5

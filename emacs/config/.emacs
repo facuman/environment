@@ -23,6 +23,9 @@
 ;; -----------------------------------------------------------------------
 (add-to-list 'load-path "~/environment/emacs/modes/")
 (add-to-list 'load-path "~/environment/emacs/modes/custom/")
+(add-to-list 'load-path "~/environment/emacs/modes/python-mode")
+(add-to-list 'load-path "~/environment/emacs/modes/cedet/ede")
+
 
 (setq byte-compile-warnings nil)
 
@@ -134,7 +137,7 @@
 
 
 ;; ------------------------------------------------------------- [ anything ]
-(load-library "facuman-anything.el")
+;;(load-library "facuman-anything.el")
 
 ;; ------------------------------------------------------------- [ regex ]
 ;;(load-library "facuman-regex.el")

@@ -1,5 +1,6 @@
 ;; ---------------------------------------------------- [ Haskell startup ]
 ;; Haskell mode settings
+(require 'haskell-mode)
 
 (defun my-haskell-startup ()
   "Haskell standard startup configuration"

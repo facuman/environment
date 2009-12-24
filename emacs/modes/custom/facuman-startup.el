@@ -24,7 +24,9 @@
 ;;	'han '("cwTeXHeiBold" . "unicode-bmp"))
 
 ;; disable toolbars
+;;(setq menu-bar-mode nil)
 (menu-bar-mode nil)
+;;(setq tool-bar-mode nil)
 (tool-bar-mode nil)
 ;; (scroll-bar-mode nil)
 
