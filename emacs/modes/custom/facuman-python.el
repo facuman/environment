@@ -3,7 +3,7 @@
   "return focus to python code buffer"
   (save-excursion ad-do-it))
 
-(require 'python)
+(require 'python-mode)
 
 ;; Initialize Pymacs
 (require 'pymacs)
@@ -90,10 +90,10 @@
 
 (defun my-ipython-startup ()
   "Setup IPython shell hook."
-  (interactive))
+  (interactive)
 
   ;; comint mode:
-  ;;(require 'comint))
+  (require 'comint)
   ;; (define-key comint-mode-map [(control p)]
   ;;   'comint-previous-matching-input-from-input)
   ;; (define-key comint-mode-map [(control n)]
@@ -105,7 +105,7 @@
   ;; (local-unset-key (kbd "<tab>"))
   ;; (local-set-key (kbd "s") 'other-window))
 
-  ;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
+  (define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete))
 
 (add-hook 'ipython-shell-hook 'my-ipython-startup)
 

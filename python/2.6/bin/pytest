@@ -1,5 +1,0 @@
-#!/home/fdeguzman/environment/python/2.6/bin/python  -u
-# EASY-INSTALL-SCRIPT: 'logilab-common==0.44.0','pytest'
-__requires__ = 'logilab-common==0.44.0'
-import pkg_resources
-pkg_resources.run_script('logilab-common==0.44.0', 'pytest')

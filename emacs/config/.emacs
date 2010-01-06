@@ -23,6 +23,10 @@
 ;; -----------------------------------------------------------------------
 (add-to-list 'load-path "~/environment/emacs/modes/")
 (add-to-list 'load-path "~/environment/emacs/modes/custom/")
+(add-to-list 'load-path "~/environment/emacs/modes/python-mode")
+(add-to-list 'load-path "~/environment/emacs/modes/cedet/ede")
+(add-to-list 'load-path "~/environment/emacs/modes/haskell-mode")
+
 
 (setq byte-compile-warnings nil)
 
@@ -72,6 +76,7 @@
                 ("\\.[Hh][Xx][Xx]$" . c++-mode)
                 ("\\.[Tt][Cc][Cc]$" . c++-mode)
                 ("\\.h$" . c++-mode)
+                ("\\.hs$" . haskell-mode)
                 ("\\.i$" . c++-mode)    ; SWIG
                 ("\\.mm?$" . objc-mode)
                 ("_emacs" . lisp-mode)
@@ -113,6 +118,10 @@
 (load-library "facuman-themes.el")
 
 
+;; ------------------------------------------------------------- [ icicles ]
+;;(require 'icicles)
+
+
 ;; ------------------------------------------------------------- [ yasnippet ]
 (load-library "facuman-yasnippet.el")
 
@@ -134,7 +143,7 @@
 
 
 ;; ------------------------------------------------------------- [ anything ]
-(load-library "facuman-anything.el")
+;;(load-library "facuman-anything.el")
 
 ;; ------------------------------------------------------------- [ regex ]
 ;;(load-library "facuman-regex.el")
@@ -257,6 +266,10 @@
 
 ;; ------------------------------------------------------------- [ org ]
 (load-library "facuman-org.el")
+
+
+;; ------------------------------------------------------------- [ javascript.el ]
+(load-library "facuman-javascript.el")
 
 
 ;; ------------------------------------------------------------- [ shell ]
