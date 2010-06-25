@@ -1,1 +1,1 @@
-/home/masamune/environment/python/pymacs/pymacs.el
+/home/fdeguzman/environment/python/pymacs/pymacs.el

@@ -25,7 +25,7 @@
 ;; GNU Emacs; see the file COPYING.  If not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-;; $Id: ecb-common-browser.el,v 1.43 2009/06/24 14:13:41 berndl Exp $
+;; $Id: ecb-common-browser.el,v 1.45 2010/02/23 16:08:56 berndl Exp $
 
 
 ;;; History
@@ -307,6 +307,7 @@ ECB-etc data-directory \(the directory returned by \(locate-data-directory
                                      buffer-name"))                             
                              (directory :tag "Full image-path for this tree-buffer")))))
 
+;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: rename this to ecb-truncate-lines.
 (defcustom ecb-tree-truncate-lines '(ecb-directories-buffer-name
                                      ecb-sources-buffer-name
                                      ecb-methods-buffer-name
@@ -2157,8 +2158,7 @@ the returned string: 'tree-buffer-image-start which holds 0 as value and
 value."
   (let ((image nil)
         (ret nil))
-    (save-excursion
-      (set-buffer name-of-buffer)
+    (with-current-buffer name-of-buffer
       (setq image (and icon-name (tree-buffer-find-image icon-name)))
       (setq ret
             (if image

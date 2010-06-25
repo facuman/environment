@@ -23,7 +23,7 @@
 ;; GNU Emacs; see the file COPYING.  If not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-;; $Id: ecb-file-browser.el,v 1.84 2009/06/23 11:16:56 berndl Exp $
+;; $Id: ecb-file-browser.el,v 1.87 2010/02/24 21:52:55 berndl Exp $
 
 ;;; Commentary:
 
@@ -1288,7 +1288,9 @@ Emacs) and `vc-cvs-status' \(Xemacs) to the ECB-VC-state-values."
                 (ecb-vc-dir-managed-by-SCCS . ecb-vc-state)
                 (ecb-vc-dir-managed-by-SVN . ecb-vc-state)
                 (ecb-vc-dir-managed-by-GIT . ecb-vc-state)
-                (ecb-vc-dir-managed-by-MTN . ecb-vc-state))
+                (ecb-vc-dir-managed-by-BZR . ecb-vc-state)
+                (ecb-vc-dir-managed-by-MTN . ecb-vc-state)
+                (ecb-vc-dir-managed-by-HG . ecb-vc-state))
   "*Define how to to identify the VC-backend and how to check the state.
 The value of this option is a list containing cons-cells where the car is a
 function which is called to identify the VC-backend for a DIRECTORY and the
@@ -1319,13 +1321,16 @@ possible performance.
 To prepend ECB from checking the VC-state for any file set
 `ecb-vc-enable-support' to nil.
 
-Default value: Support for CVS, RCS, SCCS, Subversion, Git and
-Monotone. To identify the VC-backend the functions
-`ecb-vc-managed-by-CVS', `ecb-vc-managed-by-RCS' rsp.
-`ecb-vc-managed-by-SCCS' rsp. `ecb-vc-managed-by-SVN' rsp.
-`ecb-vc-managed-by-GIT' rsp. `ecb-vc-managed-by-MTN'are used.
+Default value: Support for CVS, RCS, SCCS, Subversion, Git,
+Bazaar, Monotone and Mercurial. To identify the VC-backend the
+functions `ecb-vc-dir-managed-by-CVS',
+`ecb-vc-dir-managed-by-RCS' rsp. `ecb-vc-dir-managed-by-SCCS'
+rsp. `ecb-vc-dir-managed-by-SVN' rsp.
+`ecb-vc--dir-managed-by-GIT' rsp. `ecb-vc-dir-managed-by-BZR'
+rsp. `ecb-vc-dir-managed-by-MTN' rsp. `ecb-vc-dir-managed-by-HG'
+are used.
 
-For all six backends the function `ecb-vc-state' of the
+For all eight backends the function `ecb-vc-state' of the
 VC-package is used by default \(which uses a heuristic and
 therefore faster but less accurate approach), but there is also
 `ecb-vc-recompute-state' available which is an alias for
@@ -1356,8 +1361,12 @@ beginning of this option."
                                       :value ecb-vc-dir-managed-by-SVN)
                                (const :tag "ecb-vc-dir-managed-by-GIT"
                                       :value ecb-vc-dir-managed-by-GIT)
+                               (const :tag "ecb-vc-dir-managed-by-BZR"
+                                      :value ecb-vc-dir-managed-by-BZR)
                                (const :tag "ecb-vc-dir-managed-by-MTN"
                                       :value ecb-vc-dir-managed-by-MTN)
+                               (const :tag "ecb-vc-dir-managed-by-HG"
+                                      :value ecb-vc-dir-managed-by-HG)
                                (function :tag "Any function"))
                        (choice :tag "Check-state-function"
                                :menu-tag "Check-state-function"
@@ -1683,7 +1692,8 @@ ECB-history-window is not visible in current layout."
   (interactive)
   (ecb-maximize-ecb-buffer ecb-history-buffer-name t))
 
-(defecb-window-dedicator-to-ecb-buffer ecb-set-directories-buffer ecb-directories-buffer-name t
+(defecb-window-dedicator-to-ecb-buffer ecb-set-directories-buffer
+    ecb-directories-buffer-name t
   "Display the Directories-buffer in current window and make window dedicated."
   (let ((set-directories-buffer
          (not (equal ecb-use-speedbar-instead-native-tree-buffer 'dir))))
@@ -1704,7 +1714,8 @@ ECB-history-window is not visible in current layout."
           (ignore-errors (ecb-speedbar-deactivate)))
       (switch-to-buffer ecb-directories-buffer-name))))
 
-(defecb-window-dedicator-to-ecb-buffer ecb-set-sources-buffer ecb-sources-buffer-name t
+(defecb-window-dedicator-to-ecb-buffer ecb-set-sources-buffer
+    ecb-sources-buffer-name t
   "Display the Sources-buffer in current window and make window dedicated."
   (let ((set-sources-buffer
          (not (equal ecb-use-speedbar-instead-native-tree-buffer 'source))))
@@ -2153,7 +2164,19 @@ nil. Returns 'window-not-visible if the ECB-sources-buffer is not visible."
     ;; displayed in the mode-line. See `ecb-sources-filter-modeline-prefix'.
     (ecb-mode-line-format)))
 
-(defun ecb-normed-source-paths ()
+
+;; Klaus Berndl <klaus.berndl@sdm.de>: the duplicates MUST be eliminated only
+;; on path-basis and not of cons (path . alias)-basis, because
+;; ecb-source-path-functions only return paths without alias
+;; (setq ecb-source-path-functions
+;;       (list (lambda ()
+;;               '("c:/Programme/emacs-23.1/site-lisp/package-development/ecb"
+;;                 "c:/Programme/emacs-22.3"
+;;                 "c:/Programme/emacs-23.1/site-lisp/package-development"))))
+      
+;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: should we add an option for
+;; ignore-case for the duplicate-removing?!
+(defun ecb-normed-source-paths (&optional no-duplicates)
   "Return a normalized list of all source-paths.
 
 This is a list created from all elements of `ecb-source-path' and all
@@ -2162,13 +2185,27 @@ source-paths created by `ecb-source-path-functions'.
 Each element is a cons whereas car is the normed and expanded pathname \(done by
 `ecb-fix-filename') and cdr is either the alias defined for this path \(see
 `ecb-source-path') or - if there is no alias defined - the path itself \(in
-this case car and cdr are equal)."
-  (mapcar (function (lambda (elem)
-                      (let* ((path (ecb-fix-filename (if (listp elem) (nth 0 elem) elem)))
-                             (alias (if (listp elem) (nth 1 elem) path)))
-                        (cons path alias))))
-          (append (ecb-get-source-paths-from-functions)
-                  ecb-source-path)))
+this case car and cdr are equal).
+
+If NO-DUPLICATES is not nil then all duplicates in the paths-list are removed.
+An element is a duplicate if the car \(i.e. the normed and expaneded path)
+matches exactly the car of another element."
+  (let ((res (mapcar (function (lambda (elem)
+                                 (let* ((path (ecb-fix-filename (if (listp elem) (nth 0 elem) elem)))
+                                        (alias (if (listp elem) (nth 1 elem) path)))
+                                   (cons path alias))))
+                     (append ecb-source-path
+                             (ecb-get-source-paths-from-functions)
+                             ))))
+    (if no-duplicates
+        (ecb-delete-duplicates
+         res
+         (function (lambda (l r)
+                     (ecb-string= (if (consp l) (car l) l)
+                                  (if (consp r) (car r) r))
+                     ))
+         nil nil t t)
+      res)))
   
 (defun ecb-matching-source-paths (path-to-match &optional sorted)
   "Return all source-paths of `ecb-source-path' which match PATH-TO-MATCH. If
@@ -2370,8 +2407,7 @@ added.")
                      (y-or-n-p "Remove history entry for this buffer?")))
         ;; we must do this even when the history is not visible!!
         ;; the history should be always up-to-date
-        (save-excursion
-          (set-buffer ecb-history-buffer-name)
+        (with-current-buffer ecb-history-buffer-name
           (tree-buffer-remove-node node))
         ;; if we have removed a node then we must ignore the related buffer
         ;; when rebuilding the history - otherwise the node would be added
@@ -2401,8 +2437,7 @@ bucket)."
 (defun ecb-history-content-all-dead-buffers-alist ()
   "Return alist with items \(<buffer-name> . <file-name>) for dead buffers
 entries of the history-buffer."
-  (save-excursion
-    (set-buffer ecb-history-buffer-name)
+  (with-current-buffer ecb-history-buffer-name
     (delq nil (tree-node-map-subtree
                (tree-buffer-get-root)
                (function
@@ -2525,8 +2560,7 @@ Returns t if the current history filter has been applied otherwise nil."
                                           (if ecb-running-xemacs 0)))
                                         (mode (symbol-name
                                                (if (ecb-buffer-obj (car elem))
-                                                   (save-excursion
-                                                     (set-buffer (ecb-buffer-obj (car elem)))
+                                                   (with-current-buffer (ecb-buffer-obj (car elem))
                                                      major-mode)
                                                  ;; for dead buffers of the
                                                  ;; history we use auto-mode-alist
@@ -2555,8 +2589,7 @@ Returns t if the current history filter has been applied otherwise nil."
          ;; toplevel bucket of the history-buffer. This is the state before
          ;; rebuilding the history!
          (curr-bucket-expand-status-alist
-          (save-excursion
-            (set-buffer ecb-history-buffer-name)
+          (with-current-buffer ecb-history-buffer-name
             (delq nil (mapcar (function
                                (lambda (node)
                                  (when (= (tree-node->type node)
@@ -2572,8 +2605,7 @@ Returns t if the current history filter has been applied otherwise nil."
 ;;           additonal-dead-history-buffer-alist
 ;;           indirect-buffer-base
 ;;           aggregated-indirect-buffers-alist)
-    (save-excursion
-      (set-buffer ecb-history-buffer-name)
+    (with-current-buffer ecb-history-buffer-name
       (tree-buffer-clear-tree)
       (dolist (bucket-elem aggregated-alist-with-buckets)
         (let* ((best-matching-sp (if (eq ecb-history-make-buckets 'directory-with-source-path)
@@ -2719,8 +2751,7 @@ Returns t if the current history filter has been applied otherwise nil."
       (tree-buffer-update)
       (tree-buffer-highlight-node-by-data/name (ecb-path-selected-source)))
     (prog1
-        (if (and (save-excursion
-                   (set-buffer ecb-history-buffer-name)
+        (if (and (with-current-buffer ecb-history-buffer-name
                    (tree-buffer-empty-p))
                  (not (ecb-history-filter-reset-p)))
             (progn
@@ -2762,8 +2793,7 @@ indirect-buffer."
       ;; display the methods in the METHOD-buffer. We can not go back to
       ;; the edit-window because then the METHODS buffer would be
       ;; immediately updated with the methods of the edit-window.
-      (save-excursion
-        (set-buffer (ecb-source-get-buffer source))
+      (with-current-buffer (ecb-source-get-buffer source)
         (ecb-path-selected-source-set (ecb-source-get-filename source)
                                       (buffer-name))
         (ecb-update-methods-buffer--internal 'scroll-to-begin nil t t))
@@ -3218,7 +3248,8 @@ new state."
                         ;; vc-cvs-state seems to change the window-config
                         ;; (opens a new small window) if it fails...so maybe
                         ;; we have to save the window-config before this call
-                        ;; and restore it when the call fails - later... ;-)
+                        ;; and restore it when the call fails - hmm, prio 3,
+                        ;; therefore later... ;-)
 
                         ;; we must ignore errors here because it could be that
                         ;; a user has a certain VC-system not installed onto
@@ -3334,6 +3365,34 @@ the SOURCES-cache."
        (require 'vc-sccs)
        'SCCS))
        
+;; Bazaar support
+
+(defun ecb-vc-dir-managed-by-BZR (directory) 
+  "Return 'BZR if DIRECTORY is managed by Bazaar. nil if not." 
+  (and (locate-library "vc-bzr")
+       (ecb-file-exists-p (concat directory "/" ".bzr"))
+       (require 'vc)
+       (require 'vc-bzr)
+       'BZR))
+
+;; Mercurial support
+;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: if this works we should add it to
+;; `ecb-vc-supported-backends'.
+
+(defun ecb-vc-dir-managed-by-HG (directory)
+  "Return 'HG if DIRECTORY is managed by Mercurial. nil if not.
+Because with Mercurial only the top-most directory of a source-tree has a subdir
+.hg this function tries recursively upwards if there is a .hg-subdir."
+  ;; With XEmacs we must first load the vc-hooks which contain the function
+  ;; `vc-find-root'
+  (when ecb-running-xemacs
+    (ignore-errors (vc-load-vc-hooks)))
+  (and (locate-library "vc-hg")
+       (fboundp 'vc-find-root)
+       (vc-find-root directory ".hg")
+       (require 'vc)
+       (require 'vc-hg)
+       'HG))
 
 ;; Git support
 
@@ -4465,8 +4524,7 @@ edit-windows. Otherwise return nil."
       ;; current buffer is always the history-buffer - we have to set
       ;; the buffer representing data (buf) as current buffer - otherwise
       ;; ecb-kill-buffer-hook would not run correctly
-      (save-excursion
-        (set-buffer buf)
+      (with-current-buffer buf
         (kill-buffer buf)
         (ecb-add-buffers-to-history-new)))))
 

@@ -54,7 +54,7 @@ FIND=find
 #RM = rm -f
 
 ## INSTALL PATHS
-PREFIX=/usr/local
+PREFIX=/home/fdeguzman/environment/emacs/modes/cedet
 
 INFO_DIR=$(PREFIX)/share/info
 
