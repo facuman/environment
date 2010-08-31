@@ -22,6 +22,7 @@
 (add-to-list 'load-path "~/environment/emacs/modes/yasnippet-repo/")
 (add-to-list 'load-path "~/environment/emacs/modes/anything-config/")
 (add-to-list 'load-path "~/environment/emacs/modes/testing/")
+(add-to-list 'load-path "~/environment/emacs/modes/geben/")
 (setq byte-compile-warnings nil)
 
 ;; -----------------------------------------------------------------------
@@ -32,6 +33,7 @@
 ;; Autoloads (aka, the way to make emacs fast)
 ;; -----------------------------------------------------------------------
 (autoload 'hide-ifdef-define "hideif" nil t)
+(autoload 'geben "geben" "DBGp protocol front-end" t)
 (autoload 'hide-ifdef-undef  "hideif" nil t)
 (autoload 'make-regexp "make-regexp"
   "Return a regexp to match a string item in STRINGS." t)
@@ -39,6 +41,11 @@
 (autoload 'svn-status "psvn" "Psvn.el status mode." t)
 (autoload 'vc-git "vc-git" "Autoload vc git handling." t)
 (autoload 'magit-status "magit-status" "Autoload magit-status." t)
+(autoload 'iswitch-default-keybindings "iswitch-buffer"
+  "Switch buffer by susbtring" t)
+
+
+
 
 
 ;; -----------------------------------------------------------------------
@@ -101,12 +108,12 @@
       frame-title-format (concat user-login-name "@" system-name))
 
 
-(set-default-font "Bitstream Vera Sans Mono-10")
+;;(set-default-font "Bitstream Vera Sans Mono-10")
 
 ;; disable toolbars
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
 ;; display time in status bar:
 (setq display-time-24hr-format t)
@@ -401,12 +408,13 @@
                         (setq ido-execute-command-cache
                               (cons (format "%S" s) ido-execute-command-cache))))))
         ido-execute-command-cache)))))
+(global-set-key "\M-a" 'ido-execute-command)
 
-(add-hook 'ido-setup-hook
-          (lambda ()
-            (setq ido-enable-flex-matching t)
-            (global-set-key "\M-a" 'ido-execute-command)
-            ))
+;;(add-hook 'ido-setup-hook
+;;          (lambda ()
+;;            (setq ido-enable-flex-matching t)
+;;            (global-set-key "\M-a" 'ido-execute-command)
+;;            ))
 
 
 ;; ------------------------------------------------------------- [ cua ]
@@ -668,7 +676,7 @@
 (autoload 'pymacs-exec "pymacs" nil t)
 (autoload 'pymacs-load "pymacs" nil t)
 
-(setq pylookup-dir "~/environment/emacs/modes")
+(setq pylookup-dir "/home/fdeguzman/environment/emacs/modes")
 (add-to-list 'load-path pylookup-dir)
 
 ;; load pylookup when compile time
@@ -762,7 +770,7 @@
   (setq tab-width 4)
   ;;(define-key py-mode-map (kbd "M-<tab>") 'anything-ipython-complete)
   (setq indent-tabs-mode nil)  ; Autoconvert tabs to spaces
-  ;;(setq python-indent 4)
+  (setq python-indent 4)
   (setq python-continuation-offset 2)
   ;;(eldoc-mode 1)
 
@@ -919,9 +927,9 @@
 ;; ------------------------------------------------------------- [ saveplace ]
 ;; instead of save desktop, rather save last editing place in files,
 ;; as well as minibuffer:
-;;(require 'saveplace)
-;;(setq-default save-place t)
-;;(savehist-mode t)
+(require 'saveplace)
+(setq-default save-place t)
+(savehist-mode t)
 
 
 ;; ------------------------------------------------------------- [ magit ]
@@ -975,6 +983,50 @@
 
 (add-hook 'html-helper-mode-hook 'my-html-helper-mode-hook)
 
+;; ------------------------------------------------------------- [ tabbar ]
+;;(require 'tabbar)
+(dolist (func '(tabbar-mode tabbar-forward-tab tabbar-forward-group tabbar-backward-tab tabbar-backward-group))
+  (autoload func "tabbar" "Tabs at the top of buffers and easy control-tab navigation"))
+
+(defmacro defun-prefix-alt (name on-no-prefix on-prefix &optional do-always)
+  `(defun ,name (arg)
+     (interactive "P")
+     ,do-always
+     (if (equal nil arg)
+         ,on-no-prefix
+       ,on-prefix)))
+
+(defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
+(defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
+
+(global-set-key [(control tab)] 'shk-tabbar-next)
+(global-set-key [(control shift tab)] 'shk-tabbar-prev)
+
+(when (require 'tabbar)
+      (set-face-attribute 'tabbar-default nil :background "gray60")
+      (set-face-attribute 'tabbar-unselected nil
+                          :background "gray85"
+                          :foreground "gray30"
+                          :box nil)
+      (set-face-attribute 'tabbar-selected nil
+                          :background "#f2f2f6"
+                          :foreground "black"
+                          :box nil)
+      (set-face-attribute 'tabbar-button nil
+                          :box '(:line-width 1 :color "gray72" :style released-button))
+      (set-face-attribute 'tabbar-separator nil
+                          :height 0.7))
+
+
+;; ------------------------------------------------------------- [ iswitch-buffer ]
+(require 'iswitch-buffer)
+(setq iswitch-mode-hook nil)
+(global-set-key (kbd "C-}") 'iswitch-buffer)
+
+
+;; ------------------------------------------------------------- [ psvn ]
+(require 'psvn)
+(setq svn-status-verbose nil)
 
 ;; ------------------------------------------------------------- [ org ]
 ;;(require 'org-install)
@@ -1194,4 +1246,5 @@ type of version control found in that directory"
 ;;      (setq cursor-type djcb-normal-cursor-type))))
 
 ;;(add-hook 'post-command-hook 'djcb-set-cursor-according-to-mode)
+
 

@@ -55,9 +55,12 @@
 (require 'color-theme)
 
 (defvar zenburn-fg "#dcdccc")
-(defvar zenburn-bg "#3f3f3f")
+;;(defvar zenburn-bg "#3f3f3f")
+(defvar zenburn-bg "#000000")
 (defvar zenburn-bg+1 "#4f4f4f")
+;;(defvar zenburn-bg+1 "#000000")
 (defvar zenburn-bg+2 "#5f5f5f")
+;;(defvar zenburn-bg+2 "#000000")
 (defvar zenburn-red+1 "#dca3a3")
 (defvar zenburn-red "#cc9393")
 (defvar zenburn-red-1 "#bc8383")
@@ -225,6 +228,7 @@ static char *gnus-pointer[] = {
 
      `(zenburn-primary-1 ((t (:foreground ,zenburn-yellow :weight bold))))
      `(zenburn-primary-2 ((t (:foreground ,zenburn-orange :weight bold))))
+;;     '(zenburn-primary-3 ((t (:foreground "#000000" :weight bold))))
      '(zenburn-primary-3 ((t (:foreground "#dfdfbf" :weight bold))))
      '(zenburn-primary-4 ((t (:foreground "#dca3a3" :weight bold))))
      '(zenburn-primary-5 ((t (:foreground "#94bff3" :weight bold))))
@@ -595,7 +599,7 @@ static char *gnus-pointer[] = {
      `(gnus-group-news-1-empty ((t (:foreground ,zenburn-yellow))))
      `(gnus-group-news-2-empty ((t (:foreground ,zenburn-green+3))))
      `(gnus-group-news-3-empty ((t (:foreground ,zenburn-green+1))))
-     `(gnus-group-news-4-empty ((t (:foreground ,zenburn-blue-2)))) 
+     `(gnus-group-news-4-empty ((t (:foreground ,zenburn-blue-2))))
      `(gnus-group-news-5-empty ((t (:foreground ,zenburn-blue-3))))
      `(gnus-group-news-6-empty ((t (:inherit zenburn-lowlight-1))))
      `(gnus-group-news-low-empty ((t (:inherit zenburn-lowlight-1))))
@@ -787,7 +791,7 @@ static char *gnus-pointer[] = {
      '(nxml-namespace-attribute-colon
        ((t (:inherit nxml-attribute-colon))))
 
-     '(org-agenda-date-today ((t (:foreground "white" 
+     '(org-agenda-date-today ((t (:foreground "white"
                                :slant italic :weight bold))) t)       ;; white
      '(org-agenda-structure ((t (:inherit font-lock-comment-face))))  ;; zenburn-green
      '(org-archived ((t (:foreground "#8f8f8f"))))                    ;; zenburn-bg slight lighter
